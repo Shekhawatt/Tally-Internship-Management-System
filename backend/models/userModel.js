@@ -36,6 +36,11 @@ const userSchema = new mongoose.Schema({
       message: "Passwords are not the same!",
     },
   },
+  batch: {
+    type: mongoose.Schema.ObjectId,
+    ref: "Batch",
+    default: null, // Null if the user isn't assigned to a batch yet
+  },
 });
 
 // middleware for save operation to encrpt passward
