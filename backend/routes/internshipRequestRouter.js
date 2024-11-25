@@ -10,7 +10,7 @@ const internshipRequestRouter = express.Router();
 internshipRequestRouter.post(
   "/apply",
   authController.protect,
-  authController.restrictTo("temp"), // Only temp users (students) can apply
+  authController.restrictTo("temp", "admin"), // Only temp users (students) can apply
   internshipRequestController.applyForInternship
 );
 

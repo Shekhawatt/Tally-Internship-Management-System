@@ -4,6 +4,7 @@ const app = express();
 const userRouter = require("./routes/userRouter");
 const globalErrorHandler = require("./controllers/errorController");
 const appError = require("./utils/appError");
+const batchRouter = require("./routes/batchRouter");
 const internshipRequestRouter = require("./routes/internshipRequestRouter");
 
 // Body parser, reading data from body into req.body
@@ -12,7 +13,8 @@ app.use(express.urlencoded({ extended: true, limit: "10kb" }));
 app.use(cookieParser()); // Use cookie-parser middleware
 
 app.use("/api/users", userRouter);
-app.use("api/internshipRequests", internshipRequestRouter);
+app.use("/api/internshipRequests", internshipRequestRouter);
+app.use("/api/batch", batchRouter);
 
 // error handling Route
 

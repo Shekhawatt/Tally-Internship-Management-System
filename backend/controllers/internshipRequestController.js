@@ -1,10 +1,12 @@
 const InternshipRequest = require("../models/internshipRequestModel");
+const Batch = require("../models/batchModel");
+const User = require("../models/userModel");
 const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
 
 exports.applyForInternship = catchAsync(async (req, res, next) => {
   // Check if user is a student
-  if (req.user.role !== "temp") {
+  if (!(req.user.role == "temp" || req.user.role == "admin")) {
     return next(new AppError("Only students can apply for internships", 403));
   }
 
@@ -26,16 +28,27 @@ exports.applyForInternship = catchAsync(async (req, res, next) => {
     }
   }
 
-  // Check for existing pending request
-  const existingRequest = await InternshipRequest.findOne({
+  // Check if user already has a pending request for the same batch
+  const { batchId } = req.body;
+  const existingRequestForBatch = await InternshipRequest.findOne({
     student: req.user.id,
+    batch: batchId,
     status: "pending",
   });
 
-  if (existingRequest) {
+  if (existingRequestForBatch) {
     return next(
-      new AppError("You already have a pending internship request", 400)
+      new AppError(
+        "You have already applied for an internship in this batch.",
+        400
+      )
     );
+  }
+
+  // Validate batch ID
+  const batch = await Batch.findById(batchId);
+  if (!batch) {
+    return next(new AppError("Batch not found", 404));
   }
 
   // Validate required fields
@@ -63,10 +76,11 @@ exports.applyForInternship = catchAsync(async (req, res, next) => {
     }
   }
 
-  // Create internship request
+  // Create internship request with batch info
   const newRequest = await InternshipRequest.create({
     ...req.body,
     student: req.user.id,
+    batch: batchId, // Adding the batch information here
   });
 
   res.status(201).json({
@@ -103,12 +117,18 @@ exports.reviewInternshipRequest = catchAsync(async (req, res, next) => {
   }
 
   if (status === "approved") {
-    await User.findByIdAndUpdate(request.student, { role: "intern" });
+    // Assign the user role as 'intern' and link to the batch
+    await User.findByIdAndUpdate(request.student, {
+      role: "intern",
+      batch: request.batch, // Set batch for the intern
+    });
   } else if (status === "rejected") {
     // Add rejection date for rejected requests
     request.rejectionDate = new Date();
     await request.save();
   }
+  request.status = status; // Set the request status as 'approved' or 'rejected'
+  await request.save();
 
   res.status(200).json({
     status: "success",

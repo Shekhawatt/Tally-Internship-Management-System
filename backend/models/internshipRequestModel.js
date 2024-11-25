@@ -80,6 +80,7 @@ const internshipRequestSchema = new mongoose.Schema(
       enum: ["pending", "approved", "rejected"],
       default: "pending",
     },
+    batch: { type: mongoose.Schema.ObjectId, ref: "Batch", required: true },
     adminRemarks: {
       type: String,
     },
