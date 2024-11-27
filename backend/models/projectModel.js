@@ -12,14 +12,6 @@ const projectSchema = new mongoose.Schema(
       type: String,
       required: [true, "A project must have a description"],
     },
-    startDate: {
-      type: Date,
-      required: [true, "A project must have a start date"],
-    },
-    endDate: {
-      type: Date,
-      required: [true, "A project must have an end date"],
-    },
   },
   {
     timestamps: true,
