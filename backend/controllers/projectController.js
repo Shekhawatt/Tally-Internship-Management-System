@@ -5,7 +5,7 @@ const User = require("./../models/userModel");
 const mongoose = require("mongoose");
 
 exports.createProject = catchAsync(async (req, res, next) => {
-  const { name, description, startDate, endDate } = req.body;
+  const { name, description} = req.body;
 
   // Check if project name is unique
   const existingProject = await Project.findOne({ name });
@@ -16,8 +16,6 @@ exports.createProject = catchAsync(async (req, res, next) => {
   const project = await Project.create({
     name,
     description,
-    startDate,
-    endDate,
   });
 
   res.status(201).json({
