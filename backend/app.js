@@ -7,6 +7,10 @@ const appError = require("./utils/appError");
 const batchRouter = require("./routes/batchRouter");
 const internshipRequestRouter = require("./routes/internshipRequestRouter");
 const projectRouter = require("./routes/projectRouter");
+const cors = require("cors");
+
+// Enable CORS for all origins
+app.use(cors());
 
 app.get("/", (req, res) => {
   res.status(200).json({

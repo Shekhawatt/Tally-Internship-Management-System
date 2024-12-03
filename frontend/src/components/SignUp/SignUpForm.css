@@ -1,0 +1,84 @@
+/* src/components/SignUp/SignUpForm.css */
+
+/* Main container for signup page */
+.signup-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: linear-gradient(
+    to right,
+    #1e90ff,
+    #87cefa
+  ); /* Blue gradient background */
+  color: white;
+}
+
+/* Style for the signup form */
+.signup-form {
+  background-color: white;
+  border-radius: 8px;
+  padding: 30px;
+  width: 300px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+/* Style for form header */
+.signup-form h2 {
+  color: #1e90ff;
+  margin-bottom: 20px;
+}
+
+/* Style for input fields */
+.input-field {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+}
+
+.input-field:focus {
+  border-color: #1e90ff;
+  outline: none;
+}
+
+/* Style for the signup button */
+.signup-button {
+  width: 100%;
+  padding: 12px;
+  background-color: #1e90ff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.signup-button:hover {
+  background-color: #4682b4; /* Darker blue on hover */
+}
+
+/* Error message style */
+.error-message {
+  color: #ff6347; /* Tomato red */
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+/* Style for the login redirect link */
+.link {
+  color: #1e90ff;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.link:hover {
+  text-decoration: underline;
+  color: #4682b4; /* Darker blue on hover */
+}
