@@ -41,6 +41,11 @@ const userSchema = new mongoose.Schema({
     ref: "Batch",
     default: null, // Null if the user isn't assigned to a batch yet
   },
+  team: {
+    type: mongoose.Schema.ObjectId,
+    ref: "Team",
+    default: null, // For 'interns', ensure they belong to only one team
+  },
 });
 
 // middleware for save operation to encrpt passward
