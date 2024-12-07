@@ -7,7 +7,7 @@ const appError = require("./utils/appError");
 const batchRouter = require("./routes/batchRouter");
 const internshipRequestRouter = require("./routes/internshipRequestRouter");
 const projectRouter = require("./routes/projectRouter");
-
+const milestoneRouter = require("./routes/milestoneRouter");
 const teamRouter = require("./routes/teamRouter");
 const internRouter = require("./routes/internRouter");
 const guideRouter = require("./routes/guideRouter");
@@ -37,7 +37,7 @@ app.use("/api/teams", teamRouter);
 app.use("/api/interns", internRouter);
 app.use("/api/guides", guideRouter);
 app.use("/api/demos", demoRouter);
-
+app.use("/api/milestones", milestoneRouter);
 // error handling Route
 
 app.all("*", (req, res, next) => {
