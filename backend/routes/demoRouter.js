@@ -4,7 +4,7 @@ const {
   createDemo,
   updateDemo,
   deleteDemo,
-  getUpcomingDemosForUser,
+  getUpcomingDemos,
 } = require("../controllers/demoController");
 
 const router = express.Router();
@@ -21,6 +21,6 @@ router
 router.route("/:id").delete(restrictTo("admin"), deleteDemo); // Admin can delete demos
 
 // Get upcoming demos for the logged-in user
-router.route("/upcoming").get(getUpcomingDemosForUser);
+router.route("/upcoming").get(getUpcomingDemos);
 
 module.exports = router;
