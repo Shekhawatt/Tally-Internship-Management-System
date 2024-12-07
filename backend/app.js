@@ -7,10 +7,22 @@ const appError = require("./utils/appError");
 const batchRouter = require("./routes/batchRouter");
 const internshipRequestRouter = require("./routes/internshipRequestRouter");
 const projectRouter = require("./routes/projectRouter");
+
 const teamRouter = require("./routes/teamRouter");
 const internRouter = require("./routes/internRouter");
 const guideRouter = require("./routes/guideRouter");
 const demoRouter = require("./routes/demoRouter");
+const cors = require("cors");
+
+// Enable CORS for all origins
+app.use(cors());
+
+app.get("/", (req, res) => {
+  res.status(200).json({
+    status: "success",
+    message: "Welcome to the API!",
+  });
+});
 
 // Body parser, reading data from body into req.body
 app.use(express.json({ limit: "10kb" }));
