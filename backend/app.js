@@ -7,6 +7,11 @@ const appError = require("./utils/appError");
 const batchRouter = require("./routes/batchRouter");
 const internshipRequestRouter = require("./routes/internshipRequestRouter");
 const projectRouter = require("./routes/projectRouter");
+
+const teamRouter = require("./routes/teamRouter");
+const internRouter = require("./routes/internRouter");
+const guideRouter = require("./routes/guideRouter");
+const demoRouter = require("./routes/demoRouter");
 const cors = require("cors");
 
 // Enable CORS for all origins
@@ -28,6 +33,10 @@ app.use("/api/users", userRouter);
 app.use("/api/internshipRequests", internshipRequestRouter);
 app.use("/api/batch", batchRouter);
 app.use("/api/projects", projectRouter); // Register the project routes
+app.use("/api/teams", teamRouter);
+app.use("/api/interns", internRouter);
+app.use("/api/guides", guideRouter);
+app.use("/api/demos", demoRouter);
 
 // error handling Route
 
