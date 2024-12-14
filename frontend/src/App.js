@@ -1,6 +1,7 @@
 // src/App.js
 
 import React from "react";
+import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LoginForm from "./components/Login/LoginForm";
 import SignUpForm from "./components/SignUp/SignUpForm";
@@ -13,7 +14,6 @@ const App = () => {
   return (
     <Router>
       <Routes>
-        {/* Define your routes here */}
         <Route path="/login" element={<LoginForm />} />
         <Route path="/create-account" element={<SignUpForm />} />
         <Route path="/admin" element={<AdminDashboard />} />
