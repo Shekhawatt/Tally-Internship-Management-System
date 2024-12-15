@@ -39,6 +39,7 @@ app.use("/api/guides", guideRouter);
 app.use("/api/demos", demoRouter);
 app.use("/api/milestones", milestoneRouter);
 // error handling Route
+app.set('view engine', 'ejs');
 
 app.all("*", (req, res, next) => {
   next(new appError(`Can't find ${req.originalUrl} on this server!`, 404));

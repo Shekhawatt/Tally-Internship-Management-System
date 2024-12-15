@@ -22,10 +22,13 @@ const App = () => {
         <Route path="/apply" element={<ApplyPage />} />
 
         {/* Default route */}
-        <Route path="/" element={<LoginForm />} />
+        <Route path="/" element={<ApplyPage />} />
       </Routes>
     </Router>
   );
 };
 
 export default App;
+
+
+//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

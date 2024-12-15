@@ -1,106 +1,74 @@
 import React, { useState } from "react";
-import "./apply.css";
-import axios from 'axios';
-
+import axios from "axios";
+import './apply.css'; // Ensure you import the new CSS file
 
 const Apply = () => {
   const [formData, setFormData] = useState({
-    resume: null,
     fullName: "",
-    pronouns: [],
-    email: "",
-    phone: "",
-    currentLocation: "",
-    currentCompany: "",
-    isStudying: "",
     college: "",
-    availability: "",
-    joinTime: "",
-    additionalInfo: "",
+    branch: "",
+    year: "1st", // default year selection
+    cgpa: "",
+    mobileNumber: "",
+    preferredDomain: "Web Development", // default domain selection
+    workMode: "Remote", // default work mode
+    pastExperience: "",
+    resumeLink: "",
+    batch: "", // assuming this will come from backend/admin dropdown
   });
-   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-
-    if (type === "checkbox") {
-      setFormData((prevState) => {
-        if (checked) {
-          return { ...prevState, pronouns: [...prevState.pronouns, value] };
-        } else {
-          return {
-            ...prevState,
-            pronouns: prevState.pronouns.filter((item) => item !== value),
-          };
-        }
-      });
-    } else {
-      setFormData({ ...formData, [name]: value });
-    }
-  };
-
-  const handleFileChange = (e) => {
-    setFormData({ ...formData, resume: e.target.files[0] });
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
   };
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
-  setLoading(true);
+    e.preventDefault();
+    setLoading(true);
 
-  if (!formData.fullName || !formData.email || !formData.resume) {
-    setErrorMessage('Please fill in all fields');
-    setLoading(false);
-    return;
-  }
-
-  const dataToSend = new FormData();
-  dataToSend.append('fullName', formData.fullName);
-  dataToSend.append('email', formData.email);
-  dataToSend.append('resume', formData.resume);
-
-  try {
-    const response = await axios.post('/api/internship/apply', dataToSend);
-
-    if (response.data.status === 'success') {
-      setIsSubmitted(true);
-      setErrorMessage('');
+    // Basic validation
+    if (
+      !formData.fullName ||
+      !formData.college ||
+      !formData.resumeLink ||
+      !formData.cgpa ||
+      !formData.mobileNumber ||
+      !formData.batch
+    ) {
+      setErrorMessage("Please fill in all required fields");
+      setLoading(false);
+      return;
     }
-  } catch (error) {
-    console.error("Error occurred during form submission:", error);
-    setErrorMessage('Something went wrong. Please try again.');
-  } finally {
-    setLoading(false);
-  }
-};
 
+    try {
+      const response = await axios.post("/api/internshipRequests", formData, {
+        headers: {
+          "Content-Type": "application/json",
+          // 'Authorization': `Bearer ${localStorage.getItem('token')}` // Pass token if needed
+        },
+      });
+
+      if (response.data.status === "success") {
+        setIsSubmitted(true);
+        setErrorMessage("");
+      }
+    } catch (error) {
+      console.error("Error occurred during form submission:", error);
+      setErrorMessage("Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="container">
       <h1 className="heading">Tally Solutions Internship Application</h1>
-      <br/>
-      <br/>
-
       <form onSubmit={handleSubmit} className="form-container">
         <div className="form-group">
-          <label className="form-label" htmlFor="resume">
-            Resume/CV (PDF, DOC, DOCX)
-          </label>
-          <input
-            type="file"
-            id="resume"
-            name="resume"
-            onChange={handleFileChange}
-            className="form-control"
-            required
-          />
-        </div>
-
-        <div className="form-group">
-          <label className="form-label" htmlFor="fullName">
-            Full Name
-          </label>
+          <label className="form-label" htmlFor="fullName">Full Name</label>
           <input
             type="text"
             id="fullName"
@@ -113,50 +81,12 @@ const Apply = () => {
         </div>
 
         <div className="form-group">
-          <label className="form-label">Pronouns</label>
-          <div className="checkbox-group">
-            <label className="checkbox-label">
-              <input
-                type="checkbox"
-                name="pronouns"
-                value="He/Him"
-                checked={formData.pronouns.includes("He/Him")}
-                onChange={handleChange}
-              />
-              He/Him
-            </label>
-            <label className="checkbox-label">
-              <input
-                type="checkbox"
-                name="pronouns"
-                value="She/Her"
-                checked={formData.pronouns.includes("She/Her")}
-                onChange={handleChange}
-              />
-              She/Her
-            </label>
-            <label className="checkbox-label">
-              <input
-                type="checkbox"
-                name="pronouns"
-                value="They/Them"
-                checked={formData.pronouns.includes("They/Them")}
-                onChange={handleChange}
-              />
-              They/Them
-            </label>
-          </div>
-        </div>
-
-        <div className="form-group">
-          <label className="form-label" htmlFor="email">
-            Email
-          </label>
+          <label className="form-label" htmlFor="college">College Name</label>
           <input
-            type="email"
-            id="email"
-            name="email"
-            value={formData.email}
+            type="text"
+            id="college"
+            name="college"
+            value={formData.college}
             onChange={handleChange}
             className="form-control"
             required
@@ -164,14 +94,59 @@ const Apply = () => {
         </div>
 
         <div className="form-group">
-          <label className="form-label" htmlFor="phone">
-            Phone
-          </label>
+          <label className="form-label" htmlFor="branch">Branch/Major</label>
+          <input
+            type="text"
+            id="branch"
+            name="branch"
+            value={formData.branch}
+            onChange={handleChange}
+            className="form-control"
+            required
+          />
+        </div>
+
+        <div className="form-group">
+          <label className="form-label" htmlFor="year">Current Year of Study</label>
+          <select
+            id="year"
+            name="year"
+            value={formData.year}
+            onChange={handleChange}
+            className="form-control"
+            required
+          >
+            <option value="1st">1st</option>
+            <option value="2nd">2nd</option>
+            <option value="3rd">3rd</option>
+            <option value="4th">4th</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+
+        <div className="form-group">
+          <label className="form-label" htmlFor="cgpa">CGPA</label>
+          <input
+            type="number"
+            id="cgpa"
+            name="cgpa"
+            value={formData.cgpa}
+            onChange={handleChange}
+            className="form-control"
+            min="0"
+            max="10"
+            step="0.1"
+            required
+          />
+        </div>
+
+        <div className="form-group">
+          <label className="form-label" htmlFor="mobileNumber">Mobile Number</label>
           <input
             type="tel"
-            id="phone"
-            name="phone"
-            value={formData.phone}
+            id="mobileNumber"
+            name="mobileNumber"
+            value={formData.mobileNumber}
             onChange={handleChange}
             className="form-control"
             required
@@ -179,131 +154,87 @@ const Apply = () => {
         </div>
 
         <div className="form-group">
-          <label className="form-label" htmlFor="currentLocation">
-            Current Location
-          </label>
-          <input
-            type="text"
-            id="currentLocation"
-            name="currentLocation"
-            value={formData.currentLocation}
-            onChange={handleChange}
-            className="form-control"
-            required
-          />
-        </div>
-
-        <div className="form-group">
-          <label className="form-label" htmlFor="currentCompany">
-            Current Company
-          </label>
-          <input
-            type="text"
-            id="currentCompany"
-            name="currentCompany"
-            value={formData.currentCompany}
-            onChange={handleChange}
-            className="form-control"
-            required
-          />
-        </div>
-
-        <div className="form-group">
-          <label className="form-label">Are you Currently Studying?</label>
-          <div className="radio-group">
-            <label className="radio-label">
-              <input
-                type="radio"
-                name="isStudying"
-                value="Yes"
-                checked={formData.isStudying === "Yes"}
-                onChange={handleChange}
-              />
-              Yes
-            </label>
-            <label className="radio-label">
-              <input
-                type="radio"
-                name="isStudying"
-                value="No"
-                checked={formData.isStudying === "No"}
-                onChange={handleChange}
-              />
-              No
-            </label>
-          </div>
-        </div>
-
-        {formData.isStudying === "Yes" && (
-          <div className="form-group">
-            <label className="form-label" htmlFor="college">
-              College/University
-            </label>
-            <input
-              type="text"
-              id="college"
-              name="college"
-              value={formData.college}
-              onChange={handleChange}
-              className="form-control"
-            />
-          </div>
-        )}
-
-        <div className="form-group">
-          <label className="form-label" htmlFor="availability">
-            Availability Duration
-          </label>
+          <label className="form-label" htmlFor="preferredDomain">Preferred Domain</label>
           <select
-            id="availability"
-            name="availability"
-            value={formData.availability}
+            id="preferredDomain"
+            name="preferredDomain"
+            value={formData.preferredDomain}
             onChange={handleChange}
             className="form-control"
             required
           >
-            <option value="">Select Duration</option>
-            <option value="3months">3 Months</option>
-            <option value="6months">6 Months</option>
+            <option value="Web Development">Web Development</option>
+            <option value="Mobile Development">Mobile Development</option>
+            <option value="Machine Learning">Machine Learning</option>
+            <option value="Data Science">Data Science</option>
+            <option value="Cloud Computing">Cloud Computing</option>
+            <option value="DevOps">DevOps</option>
+            <option value="Blockchain">Blockchain</option>
+            <option value="UI/UX Design">UI/UX Design</option>
+            <option value="Other">Other</option>
           </select>
         </div>
 
         <div className="form-group">
-          <label className="form-label" htmlFor="joinTime">
-            When will you be able to Join?
-          </label>
+          <label className="form-label" htmlFor="workMode">Preferred Work Mode</label>
           <select
-            id="joinTime"
-            name="joinTime"
-            value={formData.joinTime}
+            id="workMode"
+            name="workMode"
+            value={formData.workMode}
             onChange={handleChange}
             className="form-control"
             required
           >
-            <option value="">Select Option</option>
-            <option value="Immediately">Immediately</option>
-            <option value="Within 15 Days">Within 15 Days</option>
-            <option value="Within a Month">Within a Month</option>
+            <option value="Remote">Remote</option>
+            <option value="On-site">On-site</option>
+            <option value="Hybrid">Hybrid</option>
           </select>
         </div>
 
         <div className="form-group">
-          <label className="form-label" htmlFor="additionalInfo">
-            Additional Information
-          </label>
+          <label className="form-label" htmlFor="pastExperience">Past Experience</label>
           <textarea
-            id="additionalInfo"
-            name="additionalInfo"
-            value={formData.additionalInfo}
+            id="pastExperience"
+            name="pastExperience"
+            value={formData.pastExperience}
             onChange={handleChange}
             className="form-control"
-            rows="4"
           />
         </div>
 
-        <button type="submit" className="btn-submit">
-          Submit Application
+        <div className="form-group">
+          <label className="form-label" htmlFor="resumeLink">Resume (Google Drive Link)</label>
+          <input
+            type="url"
+            id="resumeLink"
+            name="resumeLink"
+            value={formData.resumeLink}
+            onChange={handleChange}
+            className="form-control"
+            required
+          />
+        </div>
+
+        <div className="form-group">
+          <label className="form-label" htmlFor="batch">Batch ID</label>
+          <input
+            type="text"
+            id="batch"
+            name="batch"
+            value={formData.batch}
+            onChange={handleChange}
+            className="form-control"
+            required
+          />
+        </div>
+
+        {errorMessage && <p className="error-message">{errorMessage}</p>}
+
+        <button type="submit" className="btn btn-primary" disabled={loading}>
+          {loading ? 'Submitting...' : 'Submit'}
         </button>
+
+        {isSubmitted && <p className="success-message">Application submitted successfully!</p>}
       </form>
     </div>
   );
