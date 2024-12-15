@@ -32,29 +32,6 @@ const apiService = {
       throw error;
     }
   },
-  // writtern by sahil---->>>>
-  logout: async () => {
-    try {
-      const response = await axios.post("/api/users/logout");
-      return response.data; // Return success or error message
-    } catch (error) {
-      console.error("Logout error:", error.response ? error.response.data : error.message);
-      throw error;
-    }
-  },
-
-  // Fetch user data - Retrieves details of the logged-in user
-  getUserData: async () => {
-    try {
-      const response = await axios.get("/api/users/me");
-      return response.data; // Return user profile data (name, role, etc.)
-    } catch (error) {
-      console.error("Error fetching user data:", error.response ? error.response.data : error.message);
-      throw error;
-    }
-  },
-
-
 
   // Other API methods like logout, fetch user data, etc.
 };
