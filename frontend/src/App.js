@@ -22,7 +22,7 @@ const App = () => {
         <Route path="/apply" element={<ApplyPage />} />
 
         {/* Default route */}
-        <Route path="/" element={<LoginForm />} />
+        <Route path="/" element={<ApplyPage />} />
       </Routes>
     </Router>
   );

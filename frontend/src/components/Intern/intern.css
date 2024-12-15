@@ -1,0 +1,263 @@
+/* Overall Dashboard Styles */
+.intern-dashboard {
+  font-family: Arial, sans-serif;
+  /* padding: 20px; */
+}
+
+/* Navigation Bar */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #007BFF;
+  color: white;
+  padding: 10px 20px;
+}
+
+.navbar-left {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-button {
+  margin-left: 15px;
+  padding: 8px 15px;
+  background-color: #0056b3;
+  border: none;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.navbar-button:hover {
+  background-color: #004085;
+}
+
+/* Tab Navigation */
+.tab-navigation {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.tab-button {
+  background-color: #f0f0f0;
+  border: 1px solid #ddd;
+  padding: 10px 20px;
+  cursor: pointer;
+  margin: 0 10px;
+  font-size: 16px;
+  border-radius: 5px;
+}
+
+.tab-button.active {
+  background-color: #007BFF;
+  color: white;
+}
+
+.tab-button:hover {
+  background-color: #ddd;
+}
+
+/* Content Section */
+.content {
+  margin: 30px;
+}
+
+/* Dash Layout with Grid */
+.dash {
+  display: grid;
+  grid-template-columns: 1fr 2fr;  /* Two columns for Team and Milestones */
+  grid-template-rows: auto 1fr;   /* Auto height for the first row, and remaining space for the second row */
+  gap: 20px;  /* Gap between sections */
+  width: 100%;
+}
+
+/* Team Section */
+.team-section {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  margin-right: 20px;
+  border: 1px solid #007BFF;
+  height: 400px; /* Fixed height */
+  overflow-y: auto; /* Scroll if content overflows */
+}
+
+.team-section:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.team-section h2 {
+  font-size: 26px;
+  color: #007BFF;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #007BFF;
+  padding-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.team-section ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.team-section li {
+  font-size: 16px;
+  color: #374151;
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 8px;
+}
+
+.team-section li:hover {
+  background-color: #f1f9ff;
+}
+
+/* Milestones Section */
+.milestones-section {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease-in-out, transform 0.3s ease-in-out;
+  max-height: 400px;
+  overflow-y: scroll;
+}
+
+.milestones-section h3 {
+  font-size: 26px;
+  color: #007BFF;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #007BFF;
+  padding-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.milestones-section:hover {
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  transform: translateY(-5px);
+}
+
+.milestone {
+  margin-bottom: 15px;
+  padding: 20px;
+  background-color: #f5faff;
+  border-radius: 8px;
+  cursor: pointer;
+  border: 1px solid #cfe2ff;
+  transition: background-color 0.3s, border-color 0.3s, transform 0.2s;
+}
+
+.milestone:hover {
+  background-color: #e9f2ff;
+  border-color: #007BFF;
+  transform: scale(1.02);
+}
+
+
+.milestone-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid #cfe2ff;
+}
+
+.milestone-header h4 {
+  font-size: 20px;
+  color: #1E3A8A;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.subtasks {
+  margin-top: 15px;
+  padding-left: 20px;
+  background-color: #f9fafb;
+  border-radius: 4px;
+  padding: 10px;
+}
+
+/* Upcoming Demos Section */
+.upcoming-demos-section {
+  grid-column: span 2; /* Spans across both columns */
+  margin-top: 30px;
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  /*width: 100%; !* Ensure it fills available space *!*/
+}
+
+.upcoming-demos-section h3 {
+  font-size: 26px;
+  color: #007BFF;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #007BFF;
+  padding-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: bold;
+}
+
+#demos-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* Space between demo items */
+}
+
+.demo {
+  margin-bottom: 15px;
+  padding: 20px;
+  background-color: #f5faff;
+  border-radius: 8px;
+  cursor: pointer;
+  border: 1px solid #cfe2ff;
+  transition: background-color 0.3s, border-color 0.3s;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.demo:hover {
+  background-color: #e9f2ff;
+  border-color: #007BFF;
+  transform: scale(1.02); /* Subtle zoom on hover */
+}
+
+.demo-header h4 {
+  font-size: 20px;
+  color: #1E3A8A;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.demo-header p {
+  font-size: 14px;
+  color: #6b7280;
+}
+
+/* Make the demo section responsive */
+@media (max-width: 768px) {
+  .dash {
+    grid-template-columns: 1fr; /* Single column layout on small screens */
+  }
+
+  .team-section, .milestones-section, .upcoming-demos-section {
+    width: 100%;
+  }
+}
