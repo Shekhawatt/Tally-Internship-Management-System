@@ -12,6 +12,7 @@ const teamRouter = require("./routes/teamRouter");
 const internRouter = require("./routes/internRouter");
 const guideRouter = require("./routes/guideRouter");
 const demoRouter = require("./routes/demoRouter");
+const adminDashboardRouter = require("./routes/adminDashboardRouter");
 const cors = require("cors");
 
 // Enable CORS for all origins
@@ -38,6 +39,8 @@ app.use("/api/interns", internRouter);
 app.use("/api/guides", guideRouter);
 app.use("/api/demos", demoRouter);
 app.use("/api/milestones", milestoneRouter);
+app.use("/api/admin", adminDashboardRouter);
+
 // error handling Route
 
 app.all("*", (req, res, next) => {

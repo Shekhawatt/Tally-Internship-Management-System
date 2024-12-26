@@ -1,0 +1,118 @@
+/* Admin Dashboard Layout */
+.admin-dashboard {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: #f7fafc; /* Light background for overall clean look */
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px 30px;
+  background-color: #007bff; /* Primary blue header */
+  color: white;
+}
+
+.header-left h2 {
+  margin: 0;
+  font-size: 1.5em;
+  font-weight: 600; /* Bold font for the header */
+}
+
+.header-right i {
+  margin-left: 20px;
+  cursor: pointer;
+  font-size: 1.5em;
+  transition: color 0.3s ease;
+}
+
+.header-right i:hover {
+  color: #ffd700; /* Subtle gold on hover for icons */
+}
+
+.dashboard-container {
+  display: flex;
+  height: calc(100vh - 60px); /* Adjusted to match new header size */
+}
+
+.sidebar {
+  width: 250px;
+  background-color: #ffffff; /* White background for the sidebar */
+  color: black; /* Black text color */
+  padding-top: 20px;
+  border-radius: 0; /* No rounded corners for sidebar */
+  box-shadow: 2px 0px 15px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  transition: background-color 0.3s ease;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar ul li {
+  padding: 12px 20px;
+  cursor: pointer;
+  border-bottom: 1px solid #ddd; /* Light border to separate items */
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.sidebar ul li:hover {
+  background-color: #007bff; /* Background color changes to header's blue */
+  color: white; /* Text color changes to white on hover */
+}
+
+.dashboard-content {
+  flex-grow: 1;
+  padding: 30px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  justify-content: space-around;
+}
+
+.dashboard-cards {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.card {
+  width: 250px;
+  height: 180px;
+  background-color: #ffffff; /* Clean white background for the card */
+  padding: 20px;
+  border-radius: 15px; /* Soft rounded corners for a modern look */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for cards */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  transition: transform 0.3s ease-in-out;
+}
+
+.card h3 {
+  margin: 0;
+  font-size: 1.2em;
+  color: #333;
+  font-weight: 600;
+}
+
+.card p {
+  font-size: 2em;
+  margin-top: 10px;
+  font-weight: bold;
+  color: #007bff; /* Blue color for the main data values */
+}
+
+.card:hover {
+  transform: scale(
+    1.05
+  ); /* Slight scale effect on hover for a more dynamic feel */
+}
+
+.card:active {
+  transform: scale(1.02); /* Subtle "pressed" effect on click */
+}

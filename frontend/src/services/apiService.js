@@ -33,6 +33,17 @@ const apiService = {
     }
   },
 
+  // Fetch admin dashboard data
+  getAdminDashboardData: async () => {
+    try {
+      const response = await axios.get(`${API_URL}/api/admin/dashboard-data`);
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching admin dashboard data:", error);
+      throw error;
+    }
+  },
+
   // Other API methods like logout, fetch user data, etc.
 };
 

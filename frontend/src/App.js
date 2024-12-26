@@ -14,15 +14,12 @@ const App = () => {
     <Router>
       <Routes>
         {/* Define your routes here */}
-        <Route path="/login" element={<LoginForm />} />
+        <Route path="/" element={<LoginForm />} />
         <Route path="/create-account" element={<SignUpForm />} />
-        <Route path="/admin" element={<AdminDashboard />} />
+        <Route path="/admin/*" element={<AdminDashboard />} />
         <Route path="/guide" element={<GuideDashboard />} />
         <Route path="/intern" element={<InternDashboard />} />
         <Route path="/apply" element={<ApplyPage />} />
-
-        {/* Default route */}
-        <Route path="/" element={<ApplyPage />} />
       </Routes>
     </Router>
   );
