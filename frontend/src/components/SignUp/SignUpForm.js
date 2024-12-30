@@ -29,7 +29,7 @@ const SignUpForm = () => {
 
       if (response.status === "success") {
         // Redirect to login page after successful sign up
-        navigate("/login");
+        navigate("/");
       } else {
         setError("Error in account creation. Please try again.");
       }
@@ -84,7 +84,7 @@ const SignUpForm = () => {
         </form>
         <p>
           Already have an account?{" "}
-          <a href="/login" className="link">
+          <a href="/" className="link">
             Login here
           </a>
         </p>

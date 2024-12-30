@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import axios from "axios";
-import './apply.css'; // Ensure you import the new CSS file
+import ApiService from "../../services/apiService"; // Service for API calls
+import "./apply.css"; // Ensure you import the new CSS file
 
 const Apply = () => {
   const [formData, setFormData] = useState({
@@ -44,14 +44,8 @@ const Apply = () => {
     }
 
     try {
-      const response = await axios.post("/api/internshipRequests", formData, {
-        headers: {
-          "Content-Type": "application/json",
-          // 'Authorization': `Bearer ${localStorage.getItem('token')}` // Pass token if needed
-        },
-      });
-
-      if (response.data.status === "success") {
+      const response = await ApiService.submitInternshipRequest(formData);
+      if (response.status === "success") {
         setIsSubmitted(true);
         setErrorMessage("");
       }
@@ -68,7 +62,9 @@ const Apply = () => {
       <h1 className="heading">Tally Solutions Internship Application</h1>
       <form onSubmit={handleSubmit} className="form-container">
         <div className="form-group">
-          <label className="form-label" htmlFor="fullName">Full Name</label>
+          <label className="form-label" htmlFor="fullName">
+            Full Name
+          </label>
           <input
             type="text"
             id="fullName"
@@ -81,7 +77,9 @@ const Apply = () => {
         </div>
 
         <div className="form-group">
-          <label className="form-label" htmlFor="college">College Name</label>
+          <label className="form-label" htmlFor="college">
+            College Name
+          </label>
           <input
             type="text"
             id="college"
@@ -94,7 +92,9 @@ const Apply = () => {
         </div>
 
         <div className="form-group">
-          <label className="form-label" htmlFor="branch">Branch/Major</label>
+          <label className="form-label" htmlFor="branch">
+            Branch/Major
+          </label>
           <input
             type="text"
             id="branch"
@@ -107,7 +107,9 @@ const Apply = () => {
         </div>
 
         <div className="form-group">
-          <label className="form-label" htmlFor="year">Current Year of Study</label>
+          <label className="form-label" htmlFor="year">
+            Current Year of Study
+          </label>
           <select
             id="year"
             name="year"
@@ -125,7 +127,9 @@ const Apply = () => {
         </div>
 
         <div className="form-group">
-          <label className="form-label" htmlFor="cgpa">CGPA</label>
+          <label className="form-label" htmlFor="cgpa">
+            CGPA
+          </label>
           <input
             type="number"
             id="cgpa"
@@ -141,7 +145,9 @@ const Apply = () => {
         </div>
 
         <div className="form-group">
-          <label className="form-label" htmlFor="mobileNumber">Mobile Number</label>
+          <label className="form-label" htmlFor="mobileNumber">
+            Mobile Number
+          </label>
           <input
             type="tel"
             id="mobileNumber"
@@ -154,7 +160,9 @@ const Apply = () => {
         </div>
 
         <div className="form-group">
-          <label className="form-label" htmlFor="preferredDomain">Preferred Domain</label>
+          <label className="form-label" htmlFor="preferredDomain">
+            Preferred Domain
+          </label>
           <select
             id="preferredDomain"
             name="preferredDomain"
@@ -176,7 +184,9 @@ const Apply = () => {
         </div>
 
         <div className="form-group">
-          <label className="form-label" htmlFor="workMode">Preferred Work Mode</label>
+          <label className="form-label" htmlFor="workMode">
+            Preferred Work Mode
+          </label>
           <select
             id="workMode"
             name="workMode"
@@ -192,7 +202,9 @@ const Apply = () => {
         </div>
 
         <div className="form-group">
-          <label className="form-label" htmlFor="pastExperience">Past Experience</label>
+          <label className="form-label" htmlFor="pastExperience">
+            Past Experience
+          </label>
           <textarea
             id="pastExperience"
             name="pastExperience"
@@ -203,7 +215,9 @@ const Apply = () => {
         </div>
 
         <div className="form-group">
-          <label className="form-label" htmlFor="resumeLink">Resume (Google Drive Link)</label>
+          <label className="form-label" htmlFor="resumeLink">
+            Resume (Google Drive Link)
+          </label>
           <input
             type="url"
             id="resumeLink"
@@ -216,7 +230,9 @@ const Apply = () => {
         </div>
 
         <div className="form-group">
-          <label className="form-label" htmlFor="batch">Batch ID</label>
+          <label className="form-label" htmlFor="batch">
+            Batch ID
+          </label>
           <input
             type="text"
             id="batch"
@@ -231,10 +247,12 @@ const Apply = () => {
         {errorMessage && <p className="error-message">{errorMessage}</p>}
 
         <button type="submit" className="btn btn-primary" disabled={loading}>
-          {loading ? 'Submitting...' : 'Submit'}
+          {loading ? "Submitting..." : "Submit"}
         </button>
 
-        {isSubmitted && <p className="success-message">Application submitted successfully!</p>}
+        {isSubmitted && (
+          <p className="success-message">Application submitted successfully!</p>
+        )}
       </form>
     </div>
   );

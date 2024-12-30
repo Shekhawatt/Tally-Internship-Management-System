@@ -329,6 +329,29 @@ const apiService = {
     return response.data;
   },
 
+  submitInternshipRequest: async (formData) => {
+    try {
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        throw new Error("Authorization token not found");
+      }
+      console.log(formData);
+      const response = await axios.post(
+        `${API_URL}/api/internshipRequests/apply`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  },
+
   // Other API methods like logout, fetch user data, etc.
 };
 

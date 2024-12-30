@@ -29,7 +29,8 @@ exports.applyForInternship = catchAsync(async (req, res, next) => {
   }
 
   // Check if user already has a pending request for the same batch
-  const { batchId } = req.body;
+  const batchId = req.body.batch;
+
   const existingRequestForBatch = await InternshipRequest.findOne({
     student: req.user.id,
     batch: batchId,
