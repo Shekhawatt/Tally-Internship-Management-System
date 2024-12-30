@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import apiService from "../../services/apiService";
 import UserManagement from "./UserManagement"; // Ensure this import is correct
+import ProjectManagement from "./ProjectManagement"; // Ensure this import is correct
 import "./Dashboard.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -100,7 +101,10 @@ const AdminDashboard = () => {
             <Route path="/" element={<DashboardHome data={dashboardData} />} />
             <Route path="/user-management/*" element={<UserManagement />} />
             <Route path="/team-management" element={<TeamManagement />} />
-            <Route path="/project-management" element={<ProjectManagement />} />
+            <Route
+              path="/project-management/*"
+              element={<ProjectManagement />}
+            />
             <Route path="/demo-management" element={<DemoManagement />} />
             <Route path="/progress-tracking" element={<ProgressTracking />} />
             <Route path="/report-generation" element={<ReportGeneration />} />
@@ -140,14 +144,6 @@ const TeamManagement = () => (
     <h2>Team Management</h2>
     <p>Manage teams and their details here.</p>
     {/* Add functionalities for managing teams */}
-  </div>
-);
-
-const ProjectManagement = () => (
-  <div>
-    <h2>Project Management</h2>
-    <p>View and edit project details here.</p>
-    {/* Add functionalities like viewing, editing, adding projects */}
   </div>
 );
 

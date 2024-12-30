@@ -1,52 +1,126 @@
-// ManageInternDetails.js
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import apiService from "../../services/apiService"; // Import the apiService
+import "./ManageInternDetails.css"; // Import the CSS file
 
 const ManageInternDetails = () => {
-  const [internDetails, setInternDetails] = useState({
+  const [interns, setInterns] = useState([]);
+  const [selectedIntern, setSelectedIntern] = useState(null);
+  const [updatedData, setUpdatedData] = useState({
     name: "",
     email: "",
-    status: "",
+    team: "",
   });
+  const [loading, setLoading] = useState(false);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setInternDetails({
-      ...internDetails,
-      [name]: value,
+  useEffect(() => {
+    const fetchInterns = async () => {
+      try {
+        const internsData = await apiService.getInternList();
+        console.log(internsData);
+        setInterns(internsData);
+      } catch (error) {
+        console.error("Error fetching interns:", error);
+      }
+    };
+
+    fetchInterns();
+  }, []);
+
+  const handleSelectIntern = (intern) => {
+    setSelectedIntern(intern);
+    setUpdatedData({
+      name: intern.name,
+      email: intern.email,
+      team: intern.team,
     });
   };
 
-  const handleSave = () => {
-    // Save intern details (mocked)
-    console.log("Intern details saved:", internDetails);
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setUpdatedData({ ...updatedData, [name]: value });
+  };
+
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      await apiService.put(`/interns/${selectedIntern._id}`, updatedData);
+      setInterns((prevInterns) =>
+        prevInterns.map((intern) =>
+          intern._id === selectedIntern._id
+            ? { ...intern, ...updatedData }
+            : intern
+        )
+      );
+      setSelectedIntern(null);
+      setUpdatedData({ name: "", email: "", team: "" });
+    } catch (error) {
+      console.error("Error updating intern details:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div>
-      <h3>Manage Intern Details</h3>
-      <input
-        type="text"
-        name="name"
-        value={internDetails.name}
-        onChange={handleChange}
-        placeholder="Name"
-      />
-      <input
-        type="email"
-        name="email"
-        value={internDetails.email}
-        onChange={handleChange}
-        placeholder="Email"
-      />
-      <select
-        name="status"
-        value={internDetails.status}
-        onChange={handleChange}
-      >
-        <option value="Active">Active</option>
-        <option value="Inactive">Inactive</option>
-      </select>
-      <button onClick={handleSave}>Save</button>
+    <div className="intern-container">
+      <div className="interns-list">
+        {interns.length > 0 ? (
+          interns.map((intern) => (
+            <div
+              key={intern._id}
+              className="intern-card"
+              onClick={() => handleSelectIntern(intern)}
+            >
+              <h3>{intern.name}</h3>
+              <p>{intern.team}</p>
+              <p>{intern.email}</p>
+            </div>
+          ))
+        ) : (
+          <p>No interns found.</p>
+        )}
+      </div>
+
+      {selectedIntern && (
+        <div className="intern-update-form">
+          <h2>Update Intern Details</h2>
+          <form onSubmit={handleUpdate}>
+            <div className="form-group">
+              <label htmlFor="name">Name:</label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                value={updatedData.name}
+                onChange={handleChange}
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="email">Email:</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                value={updatedData.email}
+                onChange={handleChange}
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="team">Team:</label>
+              <input
+                type="text"
+                id="team"
+                name="team"
+                value={updatedData.team}
+                onChange={handleChange}
+              />
+            </div>
+            <button type="submit" disabled={loading}>
+              {loading ? "Updating..." : "Update"}
+            </button>
+          </form>
+        </div>
+      )}
     </div>
   );
 };

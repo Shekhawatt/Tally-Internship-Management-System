@@ -6,7 +6,7 @@ const AppError = require("../utils/appError");
 
 exports.applyForInternship = catchAsync(async (req, res, next) => {
   // Check if user is a student
-  if (!(req.user.role == "temp" || req.user.role == "admin")) {
+  if (!(req.user.role == "temp")) {
     return next(new AppError("Only students can apply for internships", 403));
   }
 
@@ -146,6 +146,10 @@ exports.getAllPendingRequests = catchAsync(async (req, res, next) => {
     .populate({
       path: "student",
       select: "name email",
+    })
+    .populate({
+      path: "batch",
+      select: "name",
     })
     .sort("-submittedAt");
 

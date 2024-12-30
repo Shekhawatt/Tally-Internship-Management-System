@@ -1,0 +1,130 @@
+/* Styles for Intern Management */
+.intern-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 20px;
+}
+
+.interns-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  overflow-y: auto;
+  max-height: 70vh; /* Set the max height for the scrolling section */
+  margin-bottom: 20px;
+}
+
+.intern-card {
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  width: 250px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.intern-card:hover {
+  transform: scale(1.05); /* Slight scale effect on hover */
+}
+
+.intern-card h3 {
+  font-size: 18px;
+  color: #003366;
+  margin-bottom: 10px;
+}
+
+.intern-card p {
+  font-size: 14px;
+  color: #555;
+  margin: 5px 0;
+}
+
+/* Update Form Styles */
+.intern-update-form {
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.intern-update-form h2 {
+  font-size: 24px;
+  color: #003366;
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 5px;
+  display: block;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #004b87;
+  box-shadow: 0 0 8px rgba(0, 75, 135, 0.2);
+}
+
+button[type="submit"] {
+  background-color: #004b87;
+  color: #fff;
+  padding: 14px;
+  font-size: 18px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 100%;
+  box-sizing: border-box;
+  transition: background-color 0.3s ease;
+}
+
+button[type="submit"]:hover {
+  background-color: #00366c;
+  transform: translateY(-2px);
+}
+
+/* Responsive Design Adjustments */
+@media (max-width: 768px) {
+  .intern-container {
+    padding: 15px;
+  }
+
+  .interns-list {
+    max-height: 60vh; /* Adjust max height for smaller screens */
+  }
+
+  .intern-card {
+    width: 100%;
+  }
+
+  .intern-update-form {
+    padding: 15px;
+  }
+
+  .form-group input {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  button[type="submit"] {
+    font-size: 16px;
+    padding: 12px;
+  }
+}

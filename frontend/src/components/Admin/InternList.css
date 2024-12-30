@@ -1,0 +1,108 @@
+/* General Container Styling */
+.intern-list-container {
+  width: 100%;
+  padding: 20px;
+  font-family: "Arial", sans-serif;
+  background-color: #f4f7fc; /* Light background for the container */
+  border-radius: 10px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  overflow-x: hidden;
+}
+
+/* Title Styling */
+.title {
+  text-align: center;
+  font-size: 28px;
+  color: #333;
+  margin-bottom: 20px;
+  font-weight: 700;
+}
+
+/* Table Container Styling */
+.table-container {
+  width: 100%;
+  overflow-y: auto;
+  max-height: 80vh;
+}
+
+/* Table Styling */
+.intern-table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+  background-color: #ffffff;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+.intern-table th,
+.intern-table td {
+  padding: 15px;
+  text-align: left;
+  font-size: 16px;
+  color: #333;
+  word-wrap: break-word;
+}
+
+/* Table Header Styling */
+.intern-table th {
+  background-color: #007bff; /* Blue background */
+  color: white;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+/* Alternate Row Colors */
+.intern-table tr:nth-child(even) {
+  background-color: #f9f9f9; /* Light gray */
+}
+
+.intern-table tr:hover {
+  background-color: #e8f1ff; /* Light blue on hover */
+}
+
+/* Table Row Styling */
+.intern-table td {
+  border-bottom: 1px solid #ddd;
+}
+
+/* Loading and Error Message Styling */
+.loading,
+.error {
+  text-align: center;
+  font-size: 18px;
+  color: #f44336; /* Red for error messages */
+  margin-top: 20px;
+}
+
+.loading {
+  color: #007bff; /* Blue for loading text */
+  font-size: 20px;
+  font-weight: 600;
+}
+
+/* Responsive Styling */
+/* @media (max-width: 768px) {
+  .intern-list-container {
+    padding: 15px;
+  }
+
+  .title {
+    font-size: 24px;
+  }
+
+  .intern-table th,
+  .intern-table td {
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  .intern-table {
+    margin-top: 15px;
+  }
+} */

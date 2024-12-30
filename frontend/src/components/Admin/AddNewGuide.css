@@ -1,0 +1,97 @@
+.add-new-guide {
+  max-width: 700px; /* Increased width */
+  margin: 50px auto;
+  padding: 30px;
+  border-radius: 15px;
+  background: #ffffff;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  font-family: "Roboto", sans-serif;
+}
+
+.add-new-guide h2 {
+  text-align: center;
+  margin-bottom: 25px;
+  color: #333333;
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #555555;
+  font-size: 1rem;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #dddddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  background: #f9f9f9;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-group input:focus {
+  border-color: #007bff;
+  background: #ffffff;
+  outline: none;
+  box-shadow: 0 3px 6px rgba(0, 123, 255, 0.2);
+}
+
+button {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(90deg, #007bff, #0056b3);
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+button:hover {
+  background: linear-gradient(90deg, #0056b3, #003d80);
+}
+
+button:active {
+  transform: scale(0.97);
+}
+
+.success-message {
+  color: #28a745;
+  text-align: center;
+  margin-top: 20px;
+  font-size: 1rem;
+}
+
+.error-message {
+  color: #dc3545;
+  text-align: center;
+  margin-top: 20px;
+  font-size: 1rem;
+}
+
+@media (max-width: 768px) {
+  .add-new-guide {
+    max-width: 90%; /* Fully responsive */
+    padding: 20px;
+  }
+
+  .add-new-guide h2 {
+    font-size: 1.6rem;
+  }
+
+  button {
+    font-size: 1rem;
+  }
+}
