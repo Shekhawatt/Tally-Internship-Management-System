@@ -12,6 +12,20 @@ exports.getAllUsers = catchAsync(async (req, res, next) => {
   });
 });
 
+// Function to filter the allowed keys from the object
+const filterObj = (obj, ...allowedFields) => {
+  const newObj = {};
+
+  // Loop through all the keys of the object
+  Object.keys(obj).forEach((el) => {
+    if (allowedFields.includes(el)) {
+      newObj[el] = obj[el]; // If the key is allowed, add it to the new object
+    }
+  });
+
+  return newObj;
+};
+
 exports.update = catchAsync(async (req, res, next) => {
   if (req.body.password || req.body.passwordConfirm) {
     return next(
@@ -21,15 +35,18 @@ exports.update = catchAsync(async (req, res, next) => {
       )
     );
   }
-
   // 2) Filtered out unwanted fields names that are not allowed to be updated
-  const filteredBody = filterObj(req.body, "email", "role");
+  const filteredBody = filterObj(req.body, "role");
 
   // 3) Update user document
-  const updatedUser = await User.findByIdAndUpdate(req.user.id, filteredBody, {
-    new: true,
-    runValidators: true,
-  });
+  const updatedUser = await userModel.findByIdAndUpdate(
+    req.user.id,
+    filteredBody,
+    {
+      new: true,
+      runValidators: true,
+    }
+  );
 
   res.status(200).json({
     status: "success",
@@ -40,7 +57,7 @@ exports.update = catchAsync(async (req, res, next) => {
 });
 
 exports.getUser = catchAsync(async (req, res, next) => {
-  const id = req.params.id;
+  const id = req.params.id || req.user._id;
   const user = await userModel.findById(id);
   res.status(200).json({
     status: "success",

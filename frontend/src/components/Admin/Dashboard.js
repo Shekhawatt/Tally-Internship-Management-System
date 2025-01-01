@@ -4,6 +4,7 @@ import apiService from "../../services/apiService";
 import UserManagement from "./UserManagement"; // Ensure this import is correct
 import ProjectManagement from "./ProjectManagement"; // Ensure this import is correct
 import TeamManagement from "./TeamManagement"; // Ensure this import is correct
+import AdminProfile from "./admin-Profile";
 import "./Dashboard.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -61,7 +62,10 @@ const AdminDashboard = () => {
           <i className="notification-icon">
             <FontAwesomeIcon icon={faBell} size="lg" />
           </i>
-          <i className="profile-icon">
+          <i
+            className="profile-icon"
+            onClick={() => navigate("/admin/profile")}
+          >
             <FontAwesomeIcon icon={faUserCircle} size="lg" />
           </i>
         </div>
@@ -106,6 +110,8 @@ const AdminDashboard = () => {
               path="/project-management/*"
               element={<ProjectManagement />}
             />
+
+            <Route path="/profile" element={<AdminProfile />} />
             <Route path="/demo-management" element={<DemoManagement />} />
             <Route path="/progress-tracking" element={<ProgressTracking />} />
             <Route path="/report-generation" element={<ReportGeneration />} />

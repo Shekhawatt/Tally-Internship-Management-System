@@ -46,6 +46,48 @@ const apiService = {
     }
   },
 
+  getProfile: async () => {
+    try {
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        throw new Error("Authorization token not found");
+      }
+
+      const response = await axios.get(`${API_URL}/api/users/me`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching profile:", error);
+      throw new Error("Failed to fetch profile");
+    }
+  },
+
+  updateProfile: async (updatedData) => {
+    try {
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        throw new Error("Authorization token not found");
+      }
+
+      const response = await axios.post(
+        `${API_URL}/api/users/update`,
+        updatedData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      throw new Error("Failed to update profile");
+    }
+  },
   // Fetch admin dashboard data
   getAdminDashboardData: async () => {
     try {

@@ -13,6 +13,7 @@ userRouter.get(
   userController.getAllUsers
 );
 userRouter.post("/update", authController.protect, userController.update);
+userRouter.get("/me", authController.protect, userController.getUser);
 userRouter.get("/:id", authController.protect, userController.getUser);
 
 // Authentication routes
