@@ -3,21 +3,21 @@
   display: flex;
   flex-direction: column;
   height: 100vh;
-  background-color: #f7fafc; /* Light background for overall clean look */
+  background-color: #f7fafc;
 }
 
 .dashboard-header {
   display: flex;
   justify-content: space-between;
   padding: 15px 30px;
-  background-color: #007bff; /* Primary blue header */
+  background-color: #007bff;
   color: white;
 }
 
 .header-left h2 {
   margin: 0;
   font-size: 1.5em;
-  font-weight: 600; /* Bold font for the header */
+  font-weight: 600;
 }
 
 .header-right i {
@@ -28,22 +28,20 @@
 }
 
 .header-right i:hover {
-  color: #ffd700; /* Subtle gold on hover for icons */
+  color: #ffd700;
 }
 
 .dashboard-container {
   display: flex;
-  height: calc(100vh - 60px); /* Adjusted to match new header size */
+  height: calc(100vh - 60px);
 }
 
 .sidebar {
   width: 250px;
-  background-color: #ffffff; /* White background for the sidebar */
-  color: black; /* Black text color */
+  background-color: #ffffff;
   padding-top: 20px;
-  border-radius: 0; /* No rounded corners for sidebar */
-  box-shadow: 2px 0px 15px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
-  transition: background-color 0.3s ease;
+  border-right: 1px solid #ddd;
+  box-shadow: 2px 0px 15px rgba(0, 0, 0, 0.1);
 }
 
 .sidebar ul {
@@ -54,43 +52,42 @@
 .sidebar ul li {
   padding: 12px 20px;
   cursor: pointer;
-  border-bottom: 1px solid #ddd; /* Light border to separate items */
+  border-bottom: 1px solid #ddd;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .sidebar ul li:hover {
-  background-color: #007bff; /* Background color changes to header's blue */
-  color: white; /* Text color changes to white on hover */
+  background-color: #007bff;
+  color: white;
 }
 
 .dashboard-content {
   flex-grow: 1;
-  padding: 30px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 30px;
-  justify-content: space-around;
+  padding: 20px;
+  box-sizing: border-box;
 }
 
 .dashboard-cards {
   display: flex;
   gap: 20px;
-  flex-wrap: wrap;
+  flex-wrap: wrap; /* Enables cards to wrap into rows */
+  justify-content: center; /* Centers the cards horizontally */
+  margin-top: 20px;
 }
 
 .card {
   width: 250px;
   height: 180px;
-  background-color: #ffffff; /* Clean white background for the card */
+  background-color: #ffffff;
   padding: 20px;
-  border-radius: 15px; /* Soft rounded corners for a modern look */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for cards */
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   text-align: center;
-  transition: transform 0.3s ease-in-out;
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
 
 .card h3 {
@@ -104,15 +101,36 @@
   font-size: 2em;
   margin-top: 10px;
   font-weight: bold;
-  color: #007bff; /* Blue color for the main data values */
+  color: #007bff;
 }
 
 .card:hover {
-  transform: scale(
-    1.05
-  ); /* Slight scale effect on hover for a more dynamic feel */
+  transform: scale(1.05);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
 
 .card:active {
-  transform: scale(1.02); /* Subtle "pressed" effect on click */
+  transform: scale(1.02);
+}
+
+/* Responsive Design for Smaller Screens */
+@media (max-width: 768px) {
+  .dashboard-cards {
+    gap: 15px;
+  }
+
+  .card {
+    width: 100%; /* Cards take full width on smaller screens */
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-content {
+    padding: 10px;
+  }
+
+  .card {
+    height: auto; /* Allow cards to adjust height dynamically */
+    padding: 15px;
+  }
 }

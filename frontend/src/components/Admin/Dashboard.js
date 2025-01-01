@@ -3,6 +3,7 @@ import { Routes, Route, useNavigate } from "react-router-dom";
 import apiService from "../../services/apiService";
 import UserManagement from "./UserManagement"; // Ensure this import is correct
 import ProjectManagement from "./ProjectManagement"; // Ensure this import is correct
+import TeamManagement from "./TeamManagement"; // Ensure this import is correct
 import "./Dashboard.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -100,7 +101,7 @@ const AdminDashboard = () => {
           <Routes>
             <Route path="/" element={<DashboardHome data={dashboardData} />} />
             <Route path="/user-management/*" element={<UserManagement />} />
-            <Route path="/team-management" element={<TeamManagement />} />
+            <Route path="/team-management/*" element={<TeamManagement />} />
             <Route
               path="/project-management/*"
               element={<ProjectManagement />}
@@ -138,14 +139,6 @@ const DashboardHome = ({ data }) => (
 );
 
 // Individual Page Components with Basic Structure
-
-const TeamManagement = () => (
-  <div>
-    <h2>Team Management</h2>
-    <p>Manage teams and their details here.</p>
-    {/* Add functionalities for managing teams */}
-  </div>
-);
 
 const DemoManagement = () => (
   <div>

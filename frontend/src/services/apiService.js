@@ -329,6 +329,30 @@ const apiService = {
     return response.data;
   },
 
+  // Delete a project
+  deleteProject: async (projectId) => {
+    try {
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        throw new Error("Authorization token not found");
+      }
+
+      const response = await axios.delete(
+        `${API_URL}/api/projects/${projectId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      return response.data;
+    } catch (error) {
+      console.error("Error in deleteProject:", error.message);
+      throw new Error("Failed to delete project");
+    }
+  },
+
   submitInternshipRequest: async (formData) => {
     try {
       const token = localStorage.getItem("authToken");
@@ -349,6 +373,27 @@ const apiService = {
       return response.data;
     } catch (error) {
       throw error;
+    }
+  },
+
+  // Add team creation function
+  addTeam: async (teamData) => {
+    try {
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        throw new Error("Authorization token not found");
+      }
+
+      const response = await axios.post(`${API_URL}/api/teams`, teamData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return response.data;
+    } catch (error) {
+      console.error("Error creating team:", error.message);
+      throw new Error("Failed to create team");
     }
   },
 

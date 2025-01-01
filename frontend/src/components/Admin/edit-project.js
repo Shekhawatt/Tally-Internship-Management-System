@@ -1,176 +1,166 @@
-import React, { useState, useEffect } from "react";
-import apiService from "../../services/apiService";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import apiService from "../../services/apiService"; // Importing the API service
 
 const EditProject = () => {
-  const navigate = useNavigate();
+  const [project, setProject] = useState({ name: "", description: "" });
+  const [error, setError] = useState(null);
+  const [showMessage, setShowMessage] = useState(false); // State to show success message
+  const { id } = useParams(); // Get the project ID from the URL
+  const navigate = useNavigate(); // Initialize navigate
 
-  const [projects, setProjects] = useState([]);
-  const [selectedProject, setSelectedProject] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [projectData, setProjectData] = useState({
-    name: "",
-    description: "",
-  });
-
-  // Fetch all projects
   useEffect(() => {
-    const fetchProjects = async () => {
-      setIsLoading(true);
+    const fetchProject = async () => {
       try {
-        const response = await apiService.getAllProjects();
-        if (response && response.projects) {
-          setProjects(response.projects); // Ensure response.projects exists
-        } else {
-          setError("No projects found.");
-        }
+        const response = await apiService.getProjectById(id); // Fetch the project data
+        setProject(response.data.project);
       } catch (err) {
-        console.error("Error fetching projects:", err.message);
-        setError("Failed to load projects.");
-      } finally {
-        setIsLoading(false);
+        setError("Failed to fetch project.");
+        console.error("Error fetching project:", err);
       }
     };
 
-    fetchProjects();
-  }, []);
+    fetchProject();
+  }, [id]);
 
-  // Handle project selection
-  const handleSelectProject = async (projectId) => {
-    setIsLoading(true);
-    try {
-      const response = await apiService.getProjectById(projectId);
-      if (response && response.project) {
-        setSelectedProject(response.project);
-        setProjectData(response.project);
-      } else {
-        setError("Failed to load project details.");
-      }
-    } catch (err) {
-      console.error("Error fetching project details:", err.message);
-      setError("Failed to load project details.");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  // Handle input changes
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setProjectData((prevData) => ({ ...prevData, [name]: value }));
-  };
-
-  // Handle project update
-  const handleUpdate = async (e) => {
+  // Handle form submission
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsLoading(true);
+
     try {
-      await apiService.updateProject(selectedProject._id, projectData);
-      navigate("/admin/project-management/view-projects");
+      await apiService.updateProject(id, project); // Update the project using the API
+      setShowMessage(true); // Show success message
+      setTimeout(() => {
+        navigate("/admin/project-management/view-projects"); // Navigate back to project list after 2 seconds
+      }, 2000);
     } catch (err) {
-      console.error("Error updating project:", err.message);
       setError("Failed to update project.");
-    } finally {
-      setIsLoading(false);
+      console.error("Error updating project:", err);
     }
   };
 
-  const styles = {
-    container: { padding: "20px", fontFamily: "Arial, sans-serif" },
-    projectList: { marginBottom: "20px" },
-    projectCard: {
-      padding: "10px",
-      margin: "10px 0",
-      border: "1px solid #ccc",
-      borderRadius: "5px",
-      cursor: "pointer",
-    },
-    formGroup: { marginBottom: "15px" },
-    label: { display: "block", marginBottom: "5px", fontWeight: "bold" },
-    input: {
-      width: "100%",
-      padding: "8px",
-      borderRadius: "4px",
-      border: "1px solid #ccc",
-    },
-    button: {
-      padding: "10px 20px",
-      backgroundColor: "#4CAF50",
-      color: "#fff",
-      border: "none",
-      borderRadius: "5px",
-      cursor: "pointer",
-    },
-    error: { color: "red", marginBottom: "10px" },
+  // Handle cancel (go back to previous page)
+  const handleCancel = () => {
+    navigate(-1); // Go back to the previous page
   };
 
   return (
     <div style={styles.container}>
-      <h2>Edit Project</h2>
+      <h1 style={styles.header}>Edit Project</h1>
+      {error && <p style={styles.messageError}>{error}</p>}
 
-      {isLoading && <p>Loading...</p>}
-      {error && <p style={styles.error}>{error}</p>}
-
-      {/* Show the project list if no project is selected */}
-      {!selectedProject && (
-        <div style={styles.projectList}>
-          <h3>Available Projects</h3>
-          {projects.length > 0 ? (
-            projects.map((project) => (
-              <div
-                key={project._id}
-                style={styles.projectCard}
-                onClick={() => handleSelectProject(project._id)}
-              >
-                {project.name}
-              </div>
-            ))
-          ) : (
-            <p>No projects available.</p>
-          )}
+      {/* Display success message after form submission */}
+      {showMessage && (
+        <div style={styles.messageContainer}>
+          <p style={styles.message}>Project updated successfully!</p>
         </div>
       )}
 
-      {/* Show the form if a project is selected */}
-      {selectedProject && (
-        <form onSubmit={handleUpdate}>
-          <div style={styles.formGroup}>
-            <label style={styles.label} htmlFor="name">
-              Project Name
-            </label>
-            <input
-              style={styles.input}
-              type="text"
-              id="name"
-              name="name"
-              value={projectData.name}
-              onChange={handleChange}
-              required
-            />
-          </div>
+      {/* Display the form if no message is shown */}
+      {!showMessage && (
+        <form onSubmit={handleSubmit} style={styles.form}>
+          <label htmlFor="name">Project Name</label>
+          <input
+            type="text"
+            id="name"
+            value={project.name}
+            onChange={(e) => setProject({ ...project, name: e.target.value })}
+            style={styles.input}
+          />
 
-          <div style={styles.formGroup}>
-            <label style={styles.label} htmlFor="description">
-              Description
-            </label>
-            <textarea
-              style={styles.input}
-              id="description"
-              name="description"
-              value={projectData.description}
-              onChange={handleChange}
-              required
-            ></textarea>
-          </div>
+          <label htmlFor="description">Project Description</label>
+          <textarea
+            id="description"
+            value={project.description}
+            onChange={(e) =>
+              setProject({ ...project, description: e.target.value })
+            }
+            style={styles.input}
+          ></textarea>
 
-          <button style={styles.button} type="submit">
-            Update Project
-          </button>
+          <div style={styles.actions}>
+            <button type="submit" style={styles.submitButton}>
+              Save
+            </button>
+            <button
+              type="button"
+              style={styles.cancelButton}
+              onClick={handleCancel}
+            >
+              Cancel
+            </button>
+          </div>
         </form>
       )}
     </div>
   );
+};
+
+const styles = {
+  container: {
+    padding: "20px",
+    fontFamily: "'Roboto', sans-serif",
+    backgroundColor: "#f0f4f8",
+    minHeight: "100vh",
+    maxWidth: "800px",
+    margin: "0 auto",
+  },
+  header: {
+    textAlign: "center",
+    fontSize: "2.5rem",
+    color: "#333",
+    marginBottom: "20px",
+  },
+  form: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "20px",
+  },
+  input: {
+    padding: "10px",
+    fontSize: "1rem",
+    borderRadius: "5px",
+    border: "1px solid #ccc",
+  },
+  actions: {
+    display: "flex",
+    justifyContent: "space-between",
+    gap: "10px",
+  },
+  submitButton: {
+    backgroundColor: "#28a745",
+    color: "#fff",
+    border: "none",
+    padding: "10px 20px",
+    borderRadius: "5px",
+    cursor: "pointer",
+    fontSize: "1rem",
+  },
+  cancelButton: {
+    backgroundColor: "#6c757d",
+    color: "#fff",
+    border: "none",
+    padding: "10px 20px",
+    borderRadius: "5px",
+    cursor: "pointer",
+    fontSize: "1rem",
+  },
+  messageContainer: {
+    backgroundColor: "#28a745",
+    padding: "10px",
+    borderRadius: "5px",
+    marginBottom: "20px",
+  },
+  message: {
+    fontSize: "1.2rem",
+    textAlign: "center",
+    color: "#fff",
+  },
+  messageError: {
+    textAlign: "center",
+    fontSize: "1.2rem",
+    color: "red",
+  },
 };
 
 export default EditProject;

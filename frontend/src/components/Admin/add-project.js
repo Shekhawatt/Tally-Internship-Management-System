@@ -1,4 +1,3 @@
-// src/components/AddProject.js
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import apiService from "../../services/apiService"; // Import the API service to interact with backend
@@ -13,6 +12,7 @@ const AddProject = () => {
 
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [successMessage, setSuccessMessage] = useState(""); // State to hold success message
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -26,10 +26,12 @@ const AddProject = () => {
     e.preventDefault();
     setLoading(true);
     setError(null); // Reset error
+    setSuccessMessage(""); // Reset success message
 
     try {
       await apiService.createProject(projectData); // No need for response here
-      navigate("/admin/projects"); // Navigate to projects page after creation
+      setSuccessMessage("Project added successfully!"); // Set success message
+      setProjectData({ name: "", description: "" }); // Clear the form fields
     } catch (err) {
       setError("Failed to create project. Please try again.");
       console.error(err); // Log error
@@ -42,6 +44,14 @@ const AddProject = () => {
     <div style={styles.container}>
       <h2 style={styles.title}>Create a New Project</h2>
       {error && <p style={styles.error}>{error}</p>}
+
+      {/* Display success message after project is added */}
+      {successMessage && (
+        <div style={styles.successMessageContainer}>
+          <p style={styles.successMessage}>{successMessage}</p>
+        </div>
+      )}
+
       <form onSubmit={handleSubmit} style={styles.form}>
         <div style={styles.formGroup}>
           <label style={styles.label}>Project Name</label>
@@ -93,6 +103,17 @@ const styles = {
     color: "red",
     fontSize: "14px",
     marginBottom: "15px",
+  },
+  successMessageContainer: {
+    backgroundColor: "#28a745",
+    padding: "10px",
+    borderRadius: "5px",
+    marginBottom: "15px",
+  },
+  successMessage: {
+    color: "#fff",
+    fontSize: "16px",
+    textAlign: "center",
   },
   form: {
     width: "100%",

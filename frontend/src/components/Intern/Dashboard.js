@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import './intern.css';
+import React, { useEffect, useState } from "react";
+import "./intern.css";
 
 function InternDashboard() {
   const [team, setTeam] = useState({
     name: "Development Team",
     members: [
-      { _id: '1', name: 'John Doe', role: 'Developer' },
-      { _id: '2', name: 'Jane Smith', role: 'Developer' }
-    ]
+      { _id: "1", name: "John Doe", role: "Developer" },
+      { _id: "2", name: "Jane Smith", role: "Developer" },
+    ],
   });
 
   const [demos, setDemos] = useState([]);
@@ -15,8 +15,9 @@ function InternDashboard() {
     {
       title: "Product Launch",
       date: "Dec 20, 2024 - 10:00 AM",
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus sit amet libero nisi."
-    }
+      description:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus sit amet libero nisi.",
+    },
   ];
 
   useEffect(() => {
@@ -25,53 +26,53 @@ function InternDashboard() {
 
   const [milestones, setMilestones] = useState([
     {
-      _id: '1',
-      title: 'Milestone 1',
-      description: 'First milestone description',
+      _id: "1",
+      title: "Milestone 1",
+      description: "First milestone description",
       subtasks: [
-        { _id: '1', title: 'Subtask 1', isCompleted: false },
-        { _id: '2', title: 'Subtask 2', isCompleted: false }
+        { _id: "1", title: "Subtask 1", isCompleted: false },
+        { _id: "2", title: "Subtask 2", isCompleted: false },
       ],
-      isOpen: false
+      isOpen: false,
     },
     {
-      _id: '2',
-      title: 'Milestone 2',
-      description: 'Second milestone description',
+      _id: "2",
+      title: "Milestone 2",
+      description: "Second milestone description",
       subtasks: [
-        { _id: '3', title: 'Subtask 1', isCompleted: false },
-        { _id: '4', title: 'Subtask 2', isCompleted: false }
+        { _id: "3", title: "Subtask 1", isCompleted: false },
+        { _id: "4", title: "Subtask 2", isCompleted: false },
       ],
-      isOpen: false
+      isOpen: false,
     },
-       {
-      _id: '3',
-      title: 'Milestone 2',
-      description: 'Second milestone description',
+    {
+      _id: "3",
+      title: "Milestone 2",
+      description: "Second milestone description",
       subtasks: [
-        { _id: '5', title: 'Subtask 1', isCompleted: false },
-        { _id: '6', title: 'Subtask 2', isCompleted: false }
+        { _id: "5", title: "Subtask 1", isCompleted: false },
+        { _id: "6", title: "Subtask 2", isCompleted: false },
       ],
-      isOpen: false
+      isOpen: false,
     },
-       {
-      _id: '4',
-      title: 'Milestone 2',
-      description: 'Second milestone description',
+    {
+      _id: "4",
+      title: "Milestone 2",
+      description: "Second milestone description",
       subtasks: [
-        { _id: '7', title: 'Subtask 1', isCompleted: false },
-        { _id: '8', title: 'Subtask 2', isCompleted: false }
+        { _id: "7", title: "Subtask 1", isCompleted: false },
+        { _id: "8", title: "Subtask 2", isCompleted: false },
       ],
-      isOpen: false
-    }
+      isOpen: false,
+    },
   ]);
 
   const [activeTab, setActiveTab] = useState("dashboard");
 
   const handleSubtaskCheck = (milestoneId, subtaskId, isCompleted) => {
-    const updatedMilestones = milestones.map(milestone => {
+    const updatedMilestones = milestones.map((milestone) => {
       if (milestone._id === milestoneId) {
-        const updatedSubtasks = milestone.subtasks.map(subtask => {
+        const updatedSubtasks = milestone.subtasks.map((subtask) => {
           if (subtask._id === subtaskId) {
             return { ...subtask, isCompleted };
           }
@@ -85,7 +86,7 @@ function InternDashboard() {
   };
 
   const toggleMilestoneVisibility = (milestoneId) => {
-    const updatedMilestones = milestones.map(milestone => {
+    const updatedMilestones = milestones.map((milestone) => {
       if (milestone._id === milestoneId) {
         return { ...milestone, isOpen: !milestone.isOpen };
       }
@@ -114,7 +115,9 @@ function InternDashboard() {
           Dashboard
         </button>
         <button
-          className={`tab-button ${activeTab === "weekly-updates" ? "active" : ""}`}
+          className={`tab-button ${
+            activeTab === "weekly-updates" ? "active" : ""
+          }`}
           onClick={() => setActiveTab("weekly-updates")}
         >
           Weekly Updates
@@ -128,8 +131,10 @@ function InternDashboard() {
               <h2>{team.name}</h2>
               <h4>Members:</h4>
               <ul>
-                {team.members.map(member => (
-                  <li key={member._id}>{member.name} - {member.role}</li>
+                {team.members.map((member) => (
+                  <li key={member._id}>
+                    {member.name} - {member.role}
+                  </li>
                 ))}
               </ul>
             </div>
@@ -137,23 +142,37 @@ function InternDashboard() {
             <div className="milestones-section">
               <h3>Milestones:</h3>
               <div className="milestone-scroll-container">
-                {milestones.map(milestone => {
-                  const allCompleted = milestone.subtasks.every(subtask => subtask.isCompleted);
+                {milestones.map((milestone) => {
+                  const allCompleted = milestone.subtasks.every(
+                    (subtask) => subtask.isCompleted
+                  );
                   return (
-                    <div key={milestone._id} className={`milestone ${allCompleted ? 'completed' : ''}`}>
-                      <div className="milestone-header" onClick={() => toggleMilestoneVisibility(milestone._id)}>
+                    <div
+                      key={milestone._id}
+                      className={`milestone ${allCompleted ? "completed" : ""}`}
+                    >
+                      <div
+                        className="milestone-header"
+                        onClick={() => toggleMilestoneVisibility(milestone._id)}
+                      >
                         <h4>{milestone.title}</h4>
                         <p>{milestone.description}</p>
                       </div>
 
                       {milestone.isOpen && (
                         <div className="subtasks">
-                          {milestone.subtasks.map(subtask => (
+                          {milestone.subtasks.map((subtask) => (
                             <div key={subtask._id} className="subtask">
                               <input
                                 type="checkbox"
                                 checked={subtask.isCompleted}
-                                onChange={() => handleSubtaskCheck(milestone._id, subtask._id, !subtask.isCompleted)}
+                                onChange={() =>
+                                  handleSubtaskCheck(
+                                    milestone._id,
+                                    subtask._id,
+                                    !subtask.isCompleted
+                                  )
+                                }
                               />
                               <span>{subtask.title}</span>
                             </div>
