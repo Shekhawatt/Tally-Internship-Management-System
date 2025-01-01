@@ -14,9 +14,14 @@ const teamSchema = new mongoose.Schema(
         validate: {
           // Ensure the intern is not part of any other team
           validator: async function (value) {
-            const member = await mongoose.model("User").findById(value);
+            const member = await mongoose
+              .model("User")
+              .findById(value)
+              .select("-passwordConfirm");
             return (
-              member && member.role === "intern" && !member.team // Ensure the intern is not part of any other team
+              member &&
+              member.role === "intern" &&
+              (!member.team || member.team.length === 0) // Check if team is null or empty
             );
           },
           message: "User must be an available intern without a team",
@@ -30,7 +35,10 @@ const teamSchema = new mongoose.Schema(
         required: [true, "At least one guide must be assigned to the team"],
         validate: {
           validator: async function (value) {
-            const user = await mongoose.model("User").findById(value);
+            const user = await mongoose
+              .model("User")
+              .findById(value)
+              .select("-passwordConfirm");
             return user && user.role === "guide"; // Guides should have the "guide" role
           },
           message: "Guide must be a valid user with a guide role",
