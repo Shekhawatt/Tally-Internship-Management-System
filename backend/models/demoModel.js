@@ -2,6 +2,12 @@ const mongoose = require("mongoose");
 
 const demoSchema = new mongoose.Schema(
   {
+    Title: {
+      type: String,
+    },
+    Description: {
+      type: String,
+    },
     team: {
       type: mongoose.Schema.ObjectId,
       ref: "Team",

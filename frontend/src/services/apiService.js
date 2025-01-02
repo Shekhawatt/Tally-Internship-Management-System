@@ -527,6 +527,89 @@ const apiService = {
     }
   },
 
+  getMilestonesByTeam: async (teamId) => {
+    try {
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        throw new Error("Authorization token not found");
+      }
+
+      const response = await axios.get(
+        `${API_URL}/api/milestones/team/${teamId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching team milestones:", error.message);
+      throw new Error("Failed to fetch team milestones");
+    }
+  },
+  updateMilestoneSubtask: async (milestoneId, subtaskId, isCompleted) => {
+    try {
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        throw new Error("Authorization token not found");
+      }
+
+      const response = await axios.patch(
+        `${API_URL}/api/milestones/${milestoneId}/${subtaskId}`,
+        { isCompleted },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      return response.data;
+    } catch (error) {
+      console.error("Error updating milestone subtask:", error.message);
+      throw new Error("Failed to update milestone subtask");
+    }
+  },
+  getDemosById: async () => {
+    try {
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        throw new Error("Authorization token not found");
+      }
+
+      const response = await axios.get(`${API_URL}/api/demos/upcoming`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching Demos:", error.message);
+      throw new Error("Failed to fetch demo details");
+    }
+  },
+  getTeamById: async (teamId) => {
+    try {
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        throw new Error("Authorization token not found");
+      }
+
+      const response = await axios.get(`${API_URL}/api/teams/${teamId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching team:", error.message);
+      throw new Error("Failed to fetch team details");
+    }
+  },
   // Other API methods like logout, fetch user data, etc.
 };
 
