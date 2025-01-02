@@ -4,6 +4,7 @@ import "./intern.css";
 import { faBell, faUserCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import InternProfile from "./InternProfile";
+import apiService from "../../services/apiService";
 
 // DashboardContent Component
 function DashboardContent({
@@ -18,14 +19,29 @@ function DashboardContent({
       {/* Team Section */}
       <div className="team-section">
         <h2>{team.name}</h2>
-        <h4>Members:</h4>
-        <ul>
-          {team.members.map((member) => (
-            <li key={member._id}>
-              {member.name} - {member.role}
-            </li>
-          ))}
-        </ul>
+
+        <div className="team-members">
+          <div className="team-card">
+            <h4>Interns</h4>
+            <ul className="member-list">
+              {team.members.map((member) => (
+                <li key={member._id} className="member-item">
+                  <span>{member.name}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="team-card">
+            <h4>Guides</h4>
+            <ul className="member-list">
+              {team.guides.map((member) => (
+                <li key={member._id} className="member-item">
+                  <span>{member.name}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
       </div>
 
       {/* Milestones Section */}
@@ -80,11 +96,12 @@ function DashboardContent({
         <div id="demos-list">
           {demos.map((demo, index) => (
             <div key={index} className="demo">
-              <div className="demo-header">
-                <h4>{demo.title}</h4>
-                <p>{demo.date}</p>
-              </div>
-              <p>{demo.description}</p>
+              <h4>{demo.Title}</h4>
+              <p>
+                📅 Date & Time: {new Date(demo.startDateTime).toLocaleString()}{" "}
+                - {new Date(demo.endDateTime).toLocaleString()}
+              </p>
+              <p>📜 Description: {demo.team.project.description}</p>
             </div>
           ))}
         </div>
@@ -98,63 +115,77 @@ function InternDashboard() {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("dashboard");
   const [team, setTeam] = useState({
-    name: "Development Team",
-    members: [
-      { _id: "1", name: "John Doe", role: "Developer" },
-      { _id: "2", name: "Jane Smith", role: "Developer" },
-    ],
+    name: "Loading...",
+    members: [],
+    guides: [],
   });
   const [demos, setDemos] = useState([]);
-  const demoData = [
-    {
-      title: "Product Launch",
-      date: "Dec 20, 2024 - 10:00 AM",
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    },
-  ];
-  const [milestones, setMilestones] = useState([
-    {
-      _id: "1",
-      title: "Milestone 1",
-      description: "First milestone description",
-      subtasks: [
-        { _id: "1", title: "Subtask 1", isCompleted: false },
-        { _id: "2", title: "Subtask 2", isCompleted: false },
-      ],
-      isOpen: false,
-    },
-    {
-      _id: "2",
-      title: "Milestone 2",
-      description: "Second milestone description",
-      subtasks: [
-        { _id: "3", title: "Subtask 1", isCompleted: false },
-        { _id: "4", title: "Subtask 2", isCompleted: false },
-      ],
-      isOpen: false,
-    },
-  ]);
+  const [milestones, setMilestones] = useState([]);
 
   useEffect(() => {
-    setDemos(demoData);
+    const fetchData = async () => {
+      try {
+        // Fetching user profile to get the team ID
+        const userResponse = await apiService.getProfile();
+        const user = userResponse.user;
+        if (!user.team) {
+          throw new Error("User is not assigned to any team");
+        }
+
+        // Fetch team details using the team ID from user profile
+        const teamResponse = await apiService.getTeamById(user.team[0]);
+        setTeam(teamResponse.data.team);
+
+        // Fetch milestones for the team
+        const milestonesResponse = await apiService.getMilestonesByTeam(
+          user.team[0]
+        );
+        const milestonesWithOpenState = milestonesResponse.data.milestones.map(
+          (milestone) => ({
+            ...milestone,
+            isOpen: false,
+          })
+        );
+        setMilestones(milestonesWithOpenState);
+
+        const demosResponse = await apiService.getDemosById();
+        console.log(demosResponse);
+        setDemos(demosResponse.data);
+      } catch (err) {
+        console.error("Error fetching data:", err);
+      }
+    };
+
+    fetchData();
   }, []);
 
-  const handleSubtaskCheck = (milestoneId, subtaskId, isCompleted) => {
-    const updatedMilestones = milestones.map((milestone) => {
-      if (milestone._id === milestoneId) {
-        const updatedSubtasks = milestone.subtasks.map((subtask) => {
-          if (subtask._id === subtaskId) {
-            return { ...subtask, isCompleted };
-          }
-          return subtask;
-        });
-        return { ...milestone, subtasks: updatedSubtasks };
-      }
-      return milestone;
-    });
-    setMilestones(updatedMilestones);
+  // Handling subtask completion
+  const handleSubtaskCheck = async (milestoneId, subtaskId, isCompleted) => {
+    try {
+      await apiService.updateMilestoneSubtask(
+        milestoneId,
+        subtaskId,
+        isCompleted
+      );
+      const updatedMilestones = milestones.map((milestone) => {
+        if (milestone._id === milestoneId) {
+          const updatedSubtasks = milestone.subtasks.map((subtask) => {
+            if (subtask._id === subtaskId) {
+              return { ...subtask, isCompleted };
+            }
+            return subtask;
+          });
+          return { ...milestone, subtasks: updatedSubtasks };
+        }
+        return milestone;
+      });
+      setMilestones(updatedMilestones);
+    } catch (error) {
+      console.error("Error updating subtask:", error);
+    }
   };
 
+  // Toggling milestone visibility
   const toggleMilestoneVisibility = (milestoneId) => {
     const updatedMilestones = milestones.map((milestone) => {
       if (milestone._id === milestoneId) {

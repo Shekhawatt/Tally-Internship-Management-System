@@ -1,52 +1,49 @@
 const Team = require("../models/teamModel");
 const User = require("../models/userModel");
-const Project = require("../models/projectModel");
-const demo = require("../models/demoModel");
+const Demo = require("../models/demoModel");
 const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
 
 exports.createDemo = catchAsync(async (req, res, next) => {
-  const { team, pannel, startDateTime, endDateTime } = req.body;
+  const {
+    team: teamId,
+    pannel,
+    startDateTime,
+    endDateTime,
+    Title,
+    Description,
+  } = req.body;
 
-  // Validate team existence and fetch team details
-  const existingTeam = await Team.findById(team).populate("members guides");
-  if (!existingTeam) {
+  const team = await Team.findById(teamId).populate("members guides");
+  if (!team) {
     return next(new AppError("Invalid team ID", 400));
   }
 
-  // Gather all relevant participants
   const allParticipants = [
-    ...existingTeam.members.map((member) => member._id.toString()), // Team members
-    ...existingTeam.guides.map((guide) => guide._id.toString()), // All guides
-    ...pannel.filter((id) => id !== req.user._id), // Panel members (excluding admin)
+    ...team.members,
+    ...team.guides,
+    ...pannel.filter((id) => id !== req.user._id.toString()),
   ];
 
-  // Check for conflicting demos
   const conflictingDemos = await Demo.find({
-    $or: [
-      { "team.members": { $in: allParticipants } }, // Team members
-      { guide: { $in: allParticipants } }, // Guides
-      { pannel: { $in: allParticipants } }, // Panel members
-    ],
-    $or: [
-      {
-        startDateTime: { $lt: endDateTime },
-        endDateTime: { $gt: startDateTime },
-      }, // Overlapping times
-    ],
+    startDateTime: { $lt: endDateTime },
+    endDateTime: { $gt: startDateTime },
+    $or: [{ team: teamId }, { pannel: { $in: allParticipants } }],
   });
 
   if (conflictingDemos.length > 0) {
-    return next(
-      new AppError(
-        "One or more participants are not available during this time",
-        400
-      )
-    );
+    return next(new AppError("Schedule conflict detected", 400));
   }
 
-  // Create the demo
-  const demo = await Demo.create({ team, pannel, startDateTime, endDateTime });
+  const demo = await Demo.create({
+    team: teamId,
+    pannel,
+    startDateTime,
+    endDateTime,
+    Title,
+    Description,
+  });
+
   res.status(201).json({
     status: "success",
     data: demo,
@@ -54,76 +51,84 @@ exports.createDemo = catchAsync(async (req, res, next) => {
 });
 
 exports.updateDemo = catchAsync(async (req, res, next) => {
-  const { team, pannel, startDateTime, endDateTime } = req.body;
-
-  // Validate demo existence
   const demo = await Demo.findById(req.params.id);
   if (!demo) {
-    return next(new AppError("No demo found with this ID", 404));
+    return next(new AppError("Demo not found", 404));
   }
 
-  // Fetch team details, including all guides
-  const existingTeam = await Team.findById(team || demo.team).populate(
-    "members guides"
-  );
-  if (!existingTeam) {
+  const teamId = req.body.team || demo.team;
+  const team = await Team.findById(teamId).populate("members guides");
+  if (!team) {
     return next(new AppError("Invalid team ID", 400));
   }
 
-  // Gather all relevant participants
+  const updatedPannel = req.body.pannel || demo.pannel;
   const allParticipants = [
-    ...existingTeam.members.map((member) => member._id.toString()), // Team members
-    ...existingTeam.guides.map((guide) => guide._id.toString()), // All guides
-    ...(pannel || demo.pannel).filter((id) => id !== req.user._id), // Panel members (excluding admin)
+    ...team.members,
+    ...team.guides,
+    ...updatedPannel.filter((id) => id !== req.user._id.toString()),
   ];
 
-  // Check for conflicting demos
+  const startDateTime = req.body.startDateTime || demo.startDateTime;
+  const endDateTime = req.body.endDateTime || demo.endDateTime;
+
+  if (endDateTime <= startDateTime) {
+    return next(new AppError("End time must be after start time", 400));
+  }
+
   const conflictingDemos = await Demo.find({
-    _id: { $ne: req.params.id }, // Exclude the current demo
-    $or: [
-      { "team.members": { $in: allParticipants } }, // Team members
-      { guide: { $in: allParticipants } }, // Guides
-      { pannel: { $in: allParticipants } }, // Panel members
-    ],
-    $or: [
-      {
-        startDateTime: { $lt: endDateTime },
-        endDateTime: { $gt: startDateTime },
-      }, // Overlapping times
-    ],
+    _id: { $ne: req.params.id },
+    startDateTime: { $lt: endDateTime },
+    endDateTime: { $gt: startDateTime },
+    $or: [{ team: teamId }, { pannel: { $in: allParticipants } }],
   });
 
   if (conflictingDemos.length > 0) {
-    return next(
-      new AppError(
-        "One or more participants are not available during this time",
-        400
-      )
-    );
+    return next(new AppError("Schedule conflict detected", 400));
   }
 
-  // Update demo details
-  demo.team = team || demo.team;
-  demo.pannel = pannel || demo.pannel;
-  demo.startDateTime = startDateTime || demo.startDateTime;
-  demo.endDateTime = endDateTime || demo.endDateTime;
-  await demo.save();
+  const updatedDemo = await Demo.findByIdAndUpdate(
+    req.params.id,
+    {
+      team: teamId,
+      pannel: updatedPannel,
+      startDateTime,
+      endDateTime,
+      Title: req.body.Title || demo.Title,
+      Description: req.body.Description || demo.Description,
+    },
+    { new: true, runValidators: true }
+  );
 
   res.status(200).json({
     status: "success",
-    data: demo,
+    data: updatedDemo,
   });
 });
 
 exports.getUpcomingDemos = catchAsync(async (req, res, next) => {
   const userId = req.user._id;
 
+  const teams = await Team.find({
+    $or: [{ members: userId }, { guides: userId }],
+  });
+
   const demos = await Demo.find({
-    $or: [{ pannel: userId }, { "team.members": userId }, { guide: userId }],
-    startDateTime: { $gte: new Date() }, // Future demos
+    $or: [{ team: { $in: teams.map((team) => team._id) } }, { pannel: userId }],
+    startDateTime: { $gte: new Date() },
   })
-    .populate("team")
-    .populate("pannel");
+    .populate({
+      path: "team",
+      populate: {
+        path: "members guides project",
+        select: "-passwordConfirm -password",
+      },
+    })
+    .populate({
+      path: "pannel",
+      select: "-passwordConfirm -password",
+    })
+    .sort({ startDateTime: 1 });
 
   res.status(200).json({
     status: "success",
@@ -134,9 +139,8 @@ exports.getUpcomingDemos = catchAsync(async (req, res, next) => {
 
 exports.deleteDemo = catchAsync(async (req, res, next) => {
   const demo = await Demo.findByIdAndDelete(req.params.id);
-
   if (!demo) {
-    return next(new AppError("No demo found with this ID", 404));
+    return next(new AppError("Demo not found", 404));
   }
 
   res.status(204).json({

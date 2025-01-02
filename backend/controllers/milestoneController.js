@@ -4,8 +4,8 @@ const AppError = require("../utils/appError");
 
 // Add a new milestone
 exports.addMilestone = catchAsync(async (req, res, next) => {
-  const { teamId, title, description } = req.body;
-
+  var { teamId, title, description } = req.body;
+  teamId = req.user.team[0];
   if (!teamId || !title) {
     return next(new AppError("Team ID and Title are required", 400));
   }
@@ -136,5 +136,44 @@ exports.markSubtaskComplete = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: "success",
     data: { milestone },
+  });
+});
+
+exports.updateSubtaskCompletion = catchAsync(async (req, res, next) => {
+  const { milestoneId, subtaskId } = req.params;
+  const { isCompleted } = req.body;
+
+  // Find the milestone
+  const milestone = await Milestone.findById(milestoneId);
+  if (!milestone) {
+    return next(new AppError("Milestone not found", 404));
+  }
+
+  // Find the subtask by subtaskId
+  const subtask = milestone.subtasks.id(subtaskId);
+  if (!subtask) {
+    return next(new AppError("Subtask not found", 404));
+  }
+
+  // Update the completion status of the subtask
+  subtask.isCompleted = isCompleted;
+
+  // Check if all subtasks are completed
+  const allSubtasksCompleted = milestone.subtasks.every(
+    (task) => task.isCompleted
+  );
+
+  if (allSubtasksCompleted) {
+    milestone.isCompleted = true;
+  }
+
+  // Save the updated milestone
+  await milestone.save();
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      milestone,
+    },
   });
 });

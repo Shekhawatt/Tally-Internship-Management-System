@@ -17,5 +17,9 @@ router.patch(
   "/:milestoneId/subtask/complete/:subtaskId",
   milestoneController.markSubtaskComplete
 );
+router.patch(
+  "/:milestoneId/:subtaskId",
+  milestoneController.updateSubtaskCompletion
+);
 
 module.exports = router;

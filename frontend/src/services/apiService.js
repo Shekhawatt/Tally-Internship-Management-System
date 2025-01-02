@@ -593,13 +593,16 @@ const apiService = {
   },
 
   createBatch: async (batchData) => {
+
     try {
       const token = localStorage.getItem("authToken");
       if (!token) {
         throw new Error("Authorization token not found");
       }
 
+
       const response = await axios.post(`${API_URL}/api/batch`, batchData, {
+
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -607,6 +610,7 @@ const apiService = {
 
       return response.data;
     } catch (error) {
+
       console.error("Error creating batch:", error.message);
       throw new Error("Failed to create batch");
     }
@@ -723,6 +727,7 @@ const apiService = {
       throw new Error("Failed to fetch interns by batch");
     }
   },
+
 
   // Other API methods like logout, fetch user data, etc.
 };

@@ -22,9 +22,7 @@ router
   .get(authController.protect, restrictToAdmin, teamController.getAllTeams);
 
 // Route to get a single team by ID (Admin only)
-router
-  .route("/:id")
-  .get(authController.protect, restrictToAdmin, teamController.getTeamById);
+router.route("/:id").get(authController.protect, teamController.getTeamById);
 
 // Route to delete a team (Admin only)
 router
