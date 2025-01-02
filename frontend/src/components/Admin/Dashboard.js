@@ -4,6 +4,7 @@ import apiService from "../../services/apiService";
 import UserManagement from "./UserManagement"; // Ensure this import is correct
 import ProjectManagement from "./ProjectManagement"; // Ensure this import is correct
 import TeamManagement from "./TeamManagement"; // Ensure this import is correct
+import BatchManagement from "./BatchManagement"; // Ensure this import is correct
 import AdminProfile from "./admin-Profile";
 import "./Dashboard.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -86,8 +87,8 @@ const AdminDashboard = () => {
             <li onClick={() => navigate("/admin/demo-management")}>
               <FontAwesomeIcon icon={faChalkboard} /> Demo Management
             </li>
-            <li onClick={() => navigate("/admin/progress-tracking")}>
-              <FontAwesomeIcon icon={faChartBar} /> Progress Tracking
+            <li onClick={() => navigate("/admin/batch-management")}>
+              <FontAwesomeIcon icon={faChartBar} /> Batch Management
             </li>
             <li onClick={() => navigate("/admin/report-generation")}>
               <FontAwesomeIcon icon={faTasks} /> Report Generation
@@ -110,10 +111,9 @@ const AdminDashboard = () => {
               path="/project-management/*"
               element={<ProjectManagement />}
             />
-
             <Route path="/profile" element={<AdminProfile />} />
             <Route path="/demo-management" element={<DemoManagement />} />
-            <Route path="/progress-tracking" element={<ProgressTracking />} />
+            <Route path="/batch-management/*" element={<BatchManagement />} />
             <Route path="/report-generation" element={<ReportGeneration />} />
           </Routes>
         </div>
@@ -151,14 +151,6 @@ const DemoManagement = () => (
     <h2>Demo Management</h2>
     <p>Organize and schedule demos here.</p>
     {/* Add demo scheduling functionalities */}
-  </div>
-);
-
-const ProgressTracking = () => (
-  <div>
-    <h2>Progress Tracking</h2>
-    <p>Track the progress of the teams here.</p>
-    {/* Add functionalities for tracking team progress */}
   </div>
 );
 

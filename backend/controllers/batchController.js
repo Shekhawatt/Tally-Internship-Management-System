@@ -52,6 +52,23 @@ exports.getAllBatches = catchAsync(async (req, res, next) => {
   });
 });
 
+exports.getBatchById = catchAsync(async (req, res, next) => {
+  const { id } = req.params;
+
+  const batch = await Batch.findById(id);
+
+  if (!batch) {
+    return next(new AppError("No batch found with that ID", 404));
+  }
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      batch,
+    },
+  });
+});
+
 exports.assignToBatch = catchAsync(async (req, res, next) => {
   const { userId, batchId } = req.body;
 
