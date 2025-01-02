@@ -6,7 +6,6 @@ const AppError = require("../utils/appError");
 // Create or update a weekly update
 exports.createOrUpdateWeeklyUpdate = catchAsync(async (req, res, next) => {
   const { teamId, week, description } = req.body;
-
   // Check if an update already exists for this week and team
   let weeklyUpdate = await WeeklyUpdate.findOne({ teamId, week });
   if (weeklyUpdate) {
@@ -14,12 +13,14 @@ exports.createOrUpdateWeeklyUpdate = catchAsync(async (req, res, next) => {
     weeklyUpdate.status = {}; // Reset the status for all guides
     await weeklyUpdate.save();
   } else {
+    console.log(teamId);
     weeklyUpdate = await WeeklyUpdate.create({
       teamId,
       week,
       description,
       createdBy: req.user.id,
     });
+    console.log(weeklyUpdate);
   }
 
   res.status(200).json({

@@ -5,6 +5,7 @@ import { faBell, faUserCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import InternProfile from "./InternProfile";
 import apiService from "../../services/apiService";
+import WeeklyUpdates from "./WeeklyUpdates"; // Import WeeklyUpdates component
 
 // DashboardContent Component
 function DashboardContent({
@@ -19,7 +20,6 @@ function DashboardContent({
       {/* Team Section */}
       <div className="team-section">
         <h2>{team.name}</h2>
-
         <div className="team-members">
           <div className="team-card">
             <h4>Interns</h4>
@@ -119,8 +119,10 @@ function InternDashboard() {
     members: [],
     guides: [],
   });
+  const [teamId, setTeamId] = useState();
   const [demos, setDemos] = useState([]);
   const [milestones, setMilestones] = useState([]);
+  const [weeklyUpdates, setWeeklyUpdates] = useState([]); // State for weekly updates
 
   useEffect(() => {
     const fetchData = async () => {
@@ -140,6 +142,7 @@ function InternDashboard() {
         const milestonesResponse = await apiService.getMilestonesByTeam(
           user.team[0]
         );
+        setTeamId(user.team[0]);
         const milestonesWithOpenState = milestonesResponse.data.milestones.map(
           (milestone) => ({
             ...milestone,
@@ -148,9 +151,16 @@ function InternDashboard() {
         );
         setMilestones(milestonesWithOpenState);
 
+        // Fetch upcoming demos
         const demosResponse = await apiService.getDemosById();
-        console.log(demosResponse);
         setDemos(demosResponse.data);
+
+        // Fetch weekly updates
+        const weeklyUpdatesResponse = await apiService.fetchWeeklyUpdates(
+          user.team[0]
+        );
+        // console.log(weeklyUpdatesResponse.data.updates);
+        setWeeklyUpdates(weeklyUpdatesResponse.data.updates); // Set weekly updates
       } catch (err) {
         console.error("Error fetching data:", err);
       }
@@ -194,6 +204,10 @@ function InternDashboard() {
       return milestone;
     });
     setMilestones(updatedMilestones);
+  };
+
+  const handleUpdateClick = (update) => {
+    // setSelectedUpdate(update); // Set the clicked update as the selected update
   };
 
   return (
@@ -246,10 +260,13 @@ function InternDashboard() {
                   />
                 )}
                 {activeTab === "weekly-updates" && (
-                  <div className="weekly-updates-section">
-                    <h3>Weekly Updates</h3>
-                    <p>Content for weekly updates will be displayed here.</p>
-                  </div>
+                  <WeeklyUpdates
+                    updates={weeklyUpdates}
+                    onUpdateClick={handleUpdateClick}
+                    teamId={teamId}
+                    setWeeklyUpdates={setWeeklyUpdates}
+                  />
+                  // Use the new component
                 )}
               </div>
             </>

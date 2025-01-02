@@ -593,16 +593,13 @@ const apiService = {
   },
 
   createBatch: async (batchData) => {
-
     try {
       const token = localStorage.getItem("authToken");
       if (!token) {
         throw new Error("Authorization token not found");
       }
 
-
       const response = await axios.post(`${API_URL}/api/batch`, batchData, {
-
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -610,7 +607,6 @@ const apiService = {
 
       return response.data;
     } catch (error) {
-
       console.error("Error creating batch:", error.message);
       throw new Error("Failed to create batch");
     }
@@ -728,7 +724,57 @@ const apiService = {
     }
   },
 
+  // Fetching weekly updates
+  fetchWeeklyUpdates: async (teamId) => {
+    try {
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        throw new Error("Authorization token not found");
+      }
 
+      const response = await axios.get(
+        `${API_URL}/api/weeklyUpdate/${teamId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching weekly updates:", error.message);
+      throw new Error("Failed to fetch weekly updates");
+    }
+  },
+  addWeeklyUpdate: async (teamId, week, description) => {
+    try {
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        throw new Error("Authorization token not found");
+      }
+
+      const response = await axios.post(
+        `${API_URL}/api/weeklyUpdate/`,
+        {
+          teamId: teamId,
+          week: week,
+          description: description,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      // console.log(response.data);
+      return response.data;
+    } catch (error) {
+      console.error("Error adding weekly update:", error.message);
+      throw new Error("Failed to add weekly update");
+    }
+  },
   // Other API methods like logout, fetch user data, etc.
 };
 
