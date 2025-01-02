@@ -92,31 +92,21 @@ exports.updateTeam = catchAsync(async (req, res, next) => {
   const { id } = req.params;
   const { name, members, guides, project } = req.body;
 
+  // Log the request data to check for correctness
+  console.log("Update Team Request:", { id, name, members, guides, project });
+
   // Check if the team exists
   const team = await Team.findById(id);
   if (!team) {
+    console.log(`Team not found with ID: ${id}`);
     return next(new AppError("No team found with that ID", 404));
-  }
-
-  // Ensure that all members are not part of another team
-  for (let memberId of members) {
-    const member = await User.findById(memberId);
-    if (!member || member.role !== "intern") {
-      return next(new AppError(`User ${memberId} is not a valid intern`, 400));
-    }
-
-    // Ensure the intern is not part of any other team
-    if (member.team && member.team.toString() !== id) {
-      return next(
-        new AppError(`User ${memberId} is already part of another team`, 400)
-      );
-    }
   }
 
   // Check if the guides exist and are valid
   for (let guideId of guides) {
-    const guide = await User.findById(guideId);
+    const guide = await User.findById(guideId).select("-passwordConfirm");
     if (!guide || guide.role !== "guide") {
+      console.log(`Invalid guide: ${guideId}`);
       return next(new AppError(`User ${guideId} is not a valid guide`, 400));
     }
   }
@@ -124,7 +114,24 @@ exports.updateTeam = catchAsync(async (req, res, next) => {
   // Check if the project exists
   const teamProject = await Project.findById(project);
   if (!teamProject) {
+    console.log(`Project not found with ID: ${project}`);
     return next(new AppError("Project not found", 400));
+  }
+
+  // Uncomment this logic if you want to ensure members are not assigned to other teams
+  for (let memberId of members) {
+    const member = await User.findById(memberId).select("-passwordConfirm");
+    if (!member || member.role !== "intern") {
+      console.log(`Invalid intern: ${memberId}`);
+      return next(new AppError(`User ${memberId} is not a valid intern`, 400));
+    }
+
+    if (member.team && member.team.toString() !== id) {
+      console.log(`Intern ${memberId} is already in another team`);
+      return next(
+        new AppError(`User ${memberId} is already part of another team`, 400)
+      );
+    }
   }
 
   // Update the team details
@@ -135,11 +142,12 @@ exports.updateTeam = catchAsync(async (req, res, next) => {
 
   // Save updated team
   const updatedTeam = await team.save();
+  //console.log("Team updated:", updatedTeam);
 
   // Update the intern's team assignment
   for (let memberId of members) {
-    const member = await User.findById(memberId);
-    if (member.team !== team._id.toString()) {
+    const member = await User.findById(memberId).select("-passwordConfirm");
+    if (member.team.toString() !== team._id.toString()) {
       member.team = team._id;
       await member.save();
     }

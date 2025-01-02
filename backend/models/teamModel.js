@@ -21,7 +21,9 @@ const teamSchema = new mongoose.Schema(
             return (
               member &&
               member.role === "intern" &&
-              (!member.team || member.team.length === 0) // Check if team is null or empty
+              (!member.team ||
+                member.team.length === 0 ||
+                member.team.includes(this._id)) // Check if team is null or empty or Allow the same team assignment
             );
           },
           message: "User must be an available intern without a team",

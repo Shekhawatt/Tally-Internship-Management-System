@@ -439,6 +439,94 @@ const apiService = {
     }
   },
 
+  // Update team details
+  updateTeam: async (id, teamData) => {
+    try {
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        throw new Error("Authorization token not found");
+      }
+
+      const response = await axios.patch(
+        `${API_URL}/api/teams/${id}`,
+        teamData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      return response.data;
+    } catch (error) {
+      console.error("Error updating team:", error.message);
+      throw new Error("Failed to update team");
+    }
+  },
+
+  // Get all teams
+  getAllTeams: async () => {
+    try {
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        throw new Error("Authorization token not found");
+      }
+
+      const response = await axios.get(`${API_URL}/api/teams`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching all teams:", error.message);
+      throw new Error("Failed to fetch teams");
+    }
+  },
+
+  // Get team by ID
+  getTeamById: async (id) => {
+    try {
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        throw new Error("Authorization token not found");
+      }
+
+      const response = await axios.get(`${API_URL}/api/teams/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching team by ID:", error.message);
+      throw new Error("Failed to fetch team");
+    }
+  },
+
+  // Delete a team
+  deleteTeam: async (id) => {
+    try {
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        throw new Error("Authorization token not found");
+      }
+
+      const response = await axios.delete(`${API_URL}/api/teams/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return response.data;
+    } catch (error) {
+      console.error("Error deleting team:", error.message);
+      throw new Error("Failed to delete team");
+    }
+  },
+
   // Other API methods like logout, fetch user data, etc.
 };
 
