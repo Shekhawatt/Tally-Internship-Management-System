@@ -25,7 +25,6 @@ const filterObj = (obj, ...allowedFields) => {
 
   return newObj;
 };
-
 exports.update = catchAsync(async (req, res, next) => {
   if (req.body.password || req.body.passwordConfirm) {
     return next(
@@ -35,8 +34,9 @@ exports.update = catchAsync(async (req, res, next) => {
       )
     );
   }
-  // 2) Filtered out unwanted fields names that are not allowed to be updated
-  const filteredBody = filterObj(req.body, "role");
+
+  // 2) Filter out unwanted field names that are not allowed to be updated
+  const filteredBody = filterObj(req.body, "name", "email", "role"); // Include 'name' and 'email'
 
   // 3) Update user document
   const updatedUser = await userModel.findByIdAndUpdate(
@@ -44,7 +44,7 @@ exports.update = catchAsync(async (req, res, next) => {
     filteredBody,
     {
       new: true,
-      runValidators: true,
+      runValidators: true, // Ensures validation is applied to updated fields
     }
   );
 
