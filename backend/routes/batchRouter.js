@@ -33,6 +33,13 @@ router.get(
   batchController.getAllBatches
 );
 
+router.get(
+  "/:id",
+  authController.protect,
+  authController.restrictTo("admin"),
+  batchController.getBatchById
+);
+
 // Batch-user assignment routes
 router.post(
   "/assign",

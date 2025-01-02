@@ -1,47 +1,53 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, Routes, Route, useLocation } from "react-router-dom";
-import apiService from "../../services/apiService"; // Importing the API service
-import EditTeam from "./EditTeam"; // Importing the EditTeam component (this would be the form for editing the team)
+import apiService from "../../services/apiService";
+import EditBatch from "./EditBatch";
+import InternsByBatch from "./InternsByBatch";
 
-const ViewTeams = () => {
-  const [teams, setTeams] = useState([]);
+const ViewBatches = () => {
+  const [batches, setBatches] = useState([]);
   const [showConfirmation, setShowConfirmation] = useState(false);
-  const [teamToDelete, setTeamToDelete] = useState(null);
+  const [batchToDelete, setBatchToDelete] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Check if the current route is a nested route (edit-team)
   const isInNestedRoute = location.pathname.includes(
-    "/admin/team-management/view-teams/"
+    "/admin/batch-management/view-batches/"
   );
 
   useEffect(() => {
-    fetchTeams();
+    fetchBatches();
   }, [location]);
 
-  const fetchTeams = async () => {
+  const fetchBatches = async () => {
     try {
-      const response = await apiService.getAllTeams();
-      setTeams(response.data.teams);
+      const response = await apiService.getAllBatches();
+      setBatches(response.data.batches);
     } catch (error) {
-      console.error("Error fetching teams:", error);
+      console.error("Error fetching batches:", error);
     }
   };
 
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const options = { year: "numeric", month: "long", day: "numeric" };
+    return date.toLocaleDateString("en-GB", options); // Formats as "2 January 2025"
+  };
+
   const confirmDelete = (id) => {
-    setTeamToDelete(id);
+    setBatchToDelete(id);
     setShowConfirmation(true);
   };
 
   const handleDelete = async () => {
-    if (teamToDelete) {
+    if (batchToDelete) {
       try {
-        await apiService.deleteTeam(teamToDelete);
-        setTeams(teams.filter((team) => team._id !== teamToDelete));
+        await apiService.deleteBatch(batchToDelete);
+        setBatches(batches.filter((batch) => batch._id !== batchToDelete));
         setShowConfirmation(false);
-        setTeamToDelete(null);
+        setBatchToDelete(null);
       } catch (error) {
-        console.error("Error deleting team:", error);
+        console.error("Error deleting batch:", error);
         setShowConfirmation(false);
       }
     }
@@ -49,42 +55,51 @@ const ViewTeams = () => {
 
   const cancelDelete = () => {
     setShowConfirmation(false);
-    setTeamToDelete(null);
+    setBatchToDelete(null);
   };
 
   const handleEdit = (id) => {
-    navigate(`/admin/team-management/view-teams/edit-team/${id}`);
+    navigate(`/admin/batch-management/view-batches/edit-batch/${id}`);
+  };
+
+  const handleViewInterns = (id) => {
+    navigate(`/admin/batch-management/view-batches/interns/${id}`);
   };
 
   return (
     <div style={styles.container}>
       {!isInNestedRoute && (
         <>
-          <h2 style={styles.title}>Teams</h2>
-          <div style={styles.teamsList}>
-            {teams.map((team) => (
-              <div key={team._id} style={styles.teamCard}>
+          <h2 style={styles.title}>Batches</h2>
+          <div style={styles.batchesList}>
+            {batches.map((batch) => (
+              <div
+                key={batch._id}
+                style={styles.batchCard}
+                onClick={() => handleViewInterns(batch._id)}
+              >
                 <div style={styles.cardDetails}>
-                  <h3>{team.name}</h3>
+                  <h3>{batch.name}</h3>
                   <p>
-                    <strong>Members:</strong>{" "}
-                    {team.members.map((m) => m.name).join(", ")}
+                    <strong>Start Date:</strong> {formatDate(batch.startDate)}
                   </p>
                   <p>
-                    <strong>Guides:</strong>{" "}
-                    {team.guides?.map((g) => g.name).join(", ")}
+                    <strong>End Date:</strong> {formatDate(batch.endDate)}
                   </p>
                 </div>
-                <div style={styles.cardActions}>
+                <div
+                  style={styles.cardActions}
+                  onClick={(e) => e.stopPropagation()}
+                >
                   <button
                     style={{ ...styles.button, ...styles.editButton }}
-                    onClick={() => handleEdit(team._id)}
+                    onClick={() => handleEdit(batch._id)}
                   >
                     Edit
                   </button>
                   <button
                     style={{ ...styles.button, ...styles.deleteButton }}
-                    onClick={() => confirmDelete(team._id)}
+                    onClick={() => confirmDelete(batch._id)}
                   >
                     Delete
                   </button>
@@ -96,7 +111,7 @@ const ViewTeams = () => {
           {showConfirmation && (
             <div style={styles.confirmationOverlay}>
               <div style={styles.confirmationDialog}>
-                <p>Are you sure you want to delete this team?</p>
+                <p>Are you sure you want to delete this batch?</p>
                 <div style={styles.confirmationActions}>
                   <button style={styles.confirmButton} onClick={handleDelete}>
                     Confirm
@@ -111,9 +126,9 @@ const ViewTeams = () => {
         </>
       )}
 
-      {/* Nested route for EditTeam */}
       <Routes>
-        <Route path="edit-team/:id" element={<EditTeam />} />
+        <Route path="edit-batch/:id" element={<EditBatch />} />
+        <Route path="interns/:id" element={<InternsByBatch />} />
       </Routes>
     </div>
   );
@@ -127,7 +142,7 @@ const styles = {
     textAlign: "center",
     marginBottom: "20px",
   },
-  teamsList: {
+  batchesList: {
     display: "flex",
     flexDirection: "column",
     gap: "15px",
@@ -138,7 +153,7 @@ const styles = {
     borderRadius: "8px",
     backgroundColor: "#f5f5f5",
   },
-  teamCard: {
+  batchCard: {
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
@@ -147,9 +162,11 @@ const styles = {
     padding: "10px",
     backgroundColor: "#fff",
     boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+    cursor: "pointer",
   },
   cardDetails: {
     flex: 1,
+    textAlign: "left",
   },
   cardActions: {
     display: "flex",
@@ -170,7 +187,6 @@ const styles = {
     backgroundColor: "#f44336",
     color: "white",
   },
-
   confirmationOverlay: {
     position: "fixed",
     top: "0",
@@ -182,7 +198,6 @@ const styles = {
     justifyContent: "center",
     alignItems: "center",
   },
-
   confirmationDialog: {
     backgroundColor: "#fff",
     padding: "20px",
@@ -191,7 +206,6 @@ const styles = {
     textAlign: "center",
     boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
   },
-
   confirmationActions: {
     display: "flex",
     justifyContent: "space-around",
@@ -213,4 +227,4 @@ const styles = {
   },
 };
 
-export default ViewTeams;
+export default ViewBatches;

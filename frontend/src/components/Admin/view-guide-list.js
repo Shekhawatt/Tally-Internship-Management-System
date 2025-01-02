@@ -3,6 +3,7 @@ import apiService from "../../services/apiService"; // Import the API service to
 
 const ViewGuideList = () => {
   const [guideList, setGuideList] = useState([]);
+  const [teamNames, setTeamNames] = useState([]); // State to store team names
   const [loading, setLoading] = useState(true); // Loading state for fetching data
   const [error, setError] = useState(""); // Error state to handle any API errors
 
@@ -12,6 +13,7 @@ const ViewGuideList = () => {
       try {
         const guides = await apiService.getGuideList();
         setGuideList(guides);
+        fetchTeamNames(guides); // Fetch team names after fetching guide list
       } catch (err) {
         setError("Failed to fetch guide list");
       } finally {
@@ -21,6 +23,33 @@ const ViewGuideList = () => {
 
     fetchGuideList();
   }, []);
+
+  // Function to fetch team names by IDs
+  const fetchTeamNames = async (guides) => {
+    try {
+      const allTeams = [];
+
+      for (const guide of guides) {
+        for (const teamId of guide.team) {
+          // Check if the team name is already fetched
+          if (!allTeams.includes(teamId)) {
+            const team = await apiService.getTeamById(teamId);
+            allTeams.push({ id: teamId, name: team.data.team.name });
+          }
+        }
+      }
+
+      setTeamNames(allTeams); // Save team names to state
+    } catch (err) {
+      setError("Failed to fetch team details");
+    }
+  };
+
+  // Function to get the team name by ID
+  const getTeamNameById = (teamId) => {
+    const team = teamNames.find((t) => t.id === teamId);
+    return team ? team.name : "No Team Assigned";
+  };
 
   // If data is loading, show a loading message
   if (loading) {
@@ -51,8 +80,14 @@ const ViewGuideList = () => {
                 <td>{guide.name}</td>
                 <td>{guide.email}</td>
                 <td>{guide.role}</td>
-                <td>{guide.team ? guide.team : "No Team Assigned"}</td>{" "}
-                {/* Displaying Team */}
+                <td>
+                  {guide.team && guide.team.length > 0
+                    ? guide.team
+                        .map((teamId) => getTeamNameById(teamId))
+                        .join(", ")
+                    : "No Team Assigned"}
+                </td>{" "}
+                {/* Displaying Team names */}
               </tr>
             ))}
           </tbody>

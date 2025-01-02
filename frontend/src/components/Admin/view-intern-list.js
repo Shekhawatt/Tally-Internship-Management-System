@@ -7,11 +7,28 @@ const ViewInternList = () => {
   const [error, setError] = useState(""); // Error state to handle any API errors
 
   useEffect(() => {
-    // Fetch intern list from API
+    // Fetch intern list with team names
     const fetchInternList = async () => {
       try {
         const interns = await apiService.getInternList();
-        setInternList(interns);
+
+        // Fetch team names for each intern
+        const internsWithTeamNames = await Promise.all(
+          interns.map(async (intern) => {
+            if (intern.team && intern.team.length > 0) {
+              const teamNames = await Promise.all(
+                intern.team.map(async (teamId) => {
+                  const teamResponse = await apiService.getTeamById(teamId);
+                  return teamResponse.data.team.name;
+                })
+              );
+              return { ...intern, status: teamNames.join(", ") }; // Join team names with commas
+            }
+            return { ...intern, status: "No Team Assigned" };
+          })
+        );
+
+        setInternList(internsWithTeamNames);
       } catch (err) {
         setError("Failed to fetch intern list");
       } finally {
@@ -41,7 +58,7 @@ const ViewInternList = () => {
             <tr>
               <th>Name</th>
               <th>Email</th>
-              <th>Status</th>
+              <th>Team</th>
             </tr>
           </thead>
           <tbody>
@@ -49,7 +66,7 @@ const ViewInternList = () => {
               <tr key={intern._id}>
                 <td>{intern.name}</td>
                 <td>{intern.email}</td>
-                <td>{intern.status ? intern.status : "No Status"}</td>
+                <td>{intern.status}</td>
               </tr>
             ))}
           </tbody>
@@ -65,8 +82,8 @@ export default ViewInternList;
 const styles = `
   /* General Container Styling */
   .intern-list-container {
-    width: 50%; /* Reduced the width to 80% of the viewport width */
-    height: 100vh; /* Ensures container takes full height of the viewport */
+    width: 50%;
+    height: 100vh;
     padding: 10px;
     font-family: 'Arial', sans-serif;
     background-color: #f9f9f9;
@@ -74,9 +91,9 @@ const styles = `
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
-    justify-content: flex-start; /* Align content to the top */
-    overflow-x: hidden; /* Prevent horizontal scrolling */
-    margin: 0 auto; /* Center align the container */
+    justify-content: flex-start;
+    overflow-x: hidden;
+    margin: 0 auto;
   }
 
   /* Title Styling */
@@ -91,14 +108,14 @@ const styles = `
   /* Table Container Styling */
   .table-container {
     width: 100%;
-    overflow-y: auto; /* Enable vertical scrolling if the table overflows */
-    max-height: 80vh; /* Limit the height to 80% of the viewport */
+    overflow-y: auto;
+    max-height: 80vh;
   }
 
   /* Table Styling */
   .intern-table {
     width: 100%;
-    table-layout: fixed; /* Prevents horizontal overflow */
+    table-layout: fixed;
     border-collapse: collapse;
     margin-bottom: 20px;
     background-color: #fff;
@@ -111,7 +128,7 @@ const styles = `
     text-align: left;
     font-size: 16px;
     color: #333;
-    word-wrap: break-word; /* Ensures content breaks into multiple lines if necessary */
+    word-wrap: break-word;
   }
 
   .intern-table th {

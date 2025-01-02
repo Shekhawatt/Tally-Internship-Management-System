@@ -92,66 +92,63 @@ exports.updateTeam = catchAsync(async (req, res, next) => {
   const { id } = req.params;
   const { name, members, guides, project } = req.body;
 
-  // Log the request data to check for correctness
   console.log("Update Team Request:", { id, name, members, guides, project });
 
-  // Check if the team exists
+  // Find the existing team
   const team = await Team.findById(id);
   if (!team) {
-    console.log(`Team not found with ID: ${id}`);
     return next(new AppError("No team found with that ID", 404));
   }
 
-  // Check if the guides exist and are valid
-  for (let guideId of guides) {
-    const guide = await User.findById(guideId).select("-passwordConfirm");
-    if (!guide || guide.role !== "guide") {
-      console.log(`Invalid guide: ${guideId}`);
-      return next(new AppError(`User ${guideId} is not a valid guide`, 400));
-    }
-  }
+  // Find all current members and guides of the team
+  const currentMembers = team.members.map((member) => member.toString());
+  const currentGuides = team.guides.map((guide) => guide.toString());
 
-  // Check if the project exists
-  const teamProject = await Project.findById(project);
-  if (!teamProject) {
-    console.log(`Project not found with ID: ${project}`);
-    return next(new AppError("Project not found", 400));
-  }
+  // Find removed members and guides
+  const removedMembers = currentMembers.filter((m) => !members.includes(m));
+  const removedGuides = currentGuides.filter((g) => !guides.includes(g));
 
-  // Uncomment this logic if you want to ensure members are not assigned to other teams
-  for (let memberId of members) {
+  // Update removed members' and guides' team field to null
+  for (const memberId of removedMembers) {
     const member = await User.findById(memberId).select("-passwordConfirm");
-    if (!member || member.role !== "intern") {
-      console.log(`Invalid intern: ${memberId}`);
-      return next(new AppError(`User ${memberId} is not a valid intern`, 400));
-    }
-
-    if (member.team && member.team.toString() !== id) {
-      console.log(`Intern ${memberId} is already in another team`);
-      return next(
-        new AppError(`User ${memberId} is already part of another team`, 400)
-      );
+    if (member) {
+      member.team = [];
+      await member.save();
     }
   }
 
-  // Update the team details
+  for (const guideId of removedGuides) {
+    const guide = await User.findById(guideId).select("-passwordConfirm");
+    if (guide) {
+      guide.team = guide.team.filter((teamId) => teamId.toString() !== id);
+      await guide.save();
+    }
+  }
+
+  // Update added members' and guides' team field
+  for (const memberId of members) {
+    const member = await User.findById(memberId).select("-passwordConfirm");
+    if (member && member.team.toString() !== id) {
+      member.team = id;
+      await member.save();
+    }
+  }
+
+  for (const guideId of guides) {
+    const guide = await User.findById(guideId).select("-passwordConfirm");
+    if (guide && !guide.team.includes(id)) {
+      guide.team.push(id);
+      await guide.save();
+    }
+  }
+
+  // Update team details
   team.name = name || team.name;
   team.members = members || team.members;
   team.guides = guides || team.guides;
   team.project = project || team.project;
 
-  // Save updated team
   const updatedTeam = await team.save();
-  //console.log("Team updated:", updatedTeam);
-
-  // Update the intern's team assignment
-  for (let memberId of members) {
-    const member = await User.findById(memberId).select("-passwordConfirm");
-    if (member.team.toString() !== team._id.toString()) {
-      member.team = team._id;
-      await member.save();
-    }
-  }
 
   res.status(200).json({
     status: "success",

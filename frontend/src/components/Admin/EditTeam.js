@@ -15,7 +15,7 @@ const EditTeam = () => {
   });
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
-  const { id } = useParams(); // Get team ID from URL
+  const { id } = useParams();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -26,8 +26,14 @@ const EditTeam = () => {
         const teamData = response.data.team;
         setTeam({
           name: teamData.name,
-          members: teamData.members,
-          guides: teamData.guides,
+          members: teamData.members.map((m) => ({
+            value: m._id,
+            label: m.name,
+          })),
+          guides: teamData.guides.map((g) => ({
+            value: g._id,
+            label: g.name,
+          })),
           project: teamData.project ? teamData.project._id : "",
         });
 
@@ -36,13 +42,19 @@ const EditTeam = () => {
         const guidesData = await apiService.getGuideList();
         const projectsData = await apiService.getAllProjects();
 
-        // Filter interns to include only those whose 'team' field is null or empty
-        const availableInterns = internsData.filter(
-          (intern) => !intern.team || intern.team.length === 0
-        );
-        const availableGuides = guidesData.filter(
-          (guide) => !teamData.guides.some((g) => g._id === guide._id)
-        );
+        // Filter available interns and guides
+        const availableInterns = internsData
+          .filter(
+            (intern) =>
+              !intern.team ||
+              intern.team.length === 0 ||
+              intern.team.includes(id) // Include if already in this team
+          )
+          .map((intern) => ({ value: intern._id, label: intern.name }));
+
+        const availableGuides = guidesData
+          .filter((guide) => !teamData.guides.some((g) => g._id === guide._id))
+          .map((guide) => ({ value: guide._id, label: guide.name }));
 
         setInterns(availableInterns);
         setGuides(availableGuides);
@@ -70,15 +82,14 @@ const EditTeam = () => {
     // Prepare team data
     const updatedTeam = {
       name: team.name,
-      members: team.members.map((m) => m._id), // Only send the IDs
-      guides: team.guides.map((g) => g._id),
+      members: team.members.map((m) => m.value), // Extract IDs
+      guides: team.guides.map((g) => g.value),
       project: team.project,
     };
 
     console.log("Updated team data:", updatedTeam);
 
     try {
-      // Update team using the API
       await apiService.updateTeam(id, updatedTeam);
       setSuccess("Team updated successfully!");
       setError(null);
@@ -97,14 +108,14 @@ const EditTeam = () => {
   const handleInternSelect = (selectedOptions) => {
     setTeam({
       ...team,
-      members: selectedOptions ? selectedOptions : [],
+      members: selectedOptions || [],
     });
   };
 
   const handleGuideSelect = (selectedOptions) => {
     setTeam({
       ...team,
-      guides: selectedOptions ? selectedOptions : [],
+      guides: selectedOptions || [],
     });
   };
 
@@ -150,9 +161,6 @@ const EditTeam = () => {
       border: "1px solid #ccc",
       borderRadius: "4px",
     },
-    multiSelect: {
-      height: "120px",
-    },
     error: {
       color: "red",
       fontSize: "14px",
@@ -172,9 +180,6 @@ const EditTeam = () => {
       border: "none",
       borderRadius: "4px",
       cursor: "pointer",
-    },
-    buttonHover: {
-      backgroundColor: "#0056b3",
     },
   };
 
@@ -200,15 +205,9 @@ const EditTeam = () => {
         <Select
           isMulti
           name="interns"
-          options={interns.map((intern) => ({
-            value: intern._id,
-            label: intern.name,
-          }))}
+          options={interns}
           onChange={handleInternSelect}
-          value={team.members.map((member) => ({
-            value: member._id,
-            label: member.name,
-          }))}
+          value={team.members}
           placeholder="Select interns"
         />
       </div>
@@ -218,15 +217,9 @@ const EditTeam = () => {
         <Select
           isMulti
           name="guides"
-          options={guides.map((guide) => ({
-            value: guide._id,
-            label: guide.name,
-          }))}
+          options={guides}
           onChange={handleGuideSelect}
-          value={team.guides.map((guide) => ({
-            value: guide._id,
-            label: guide.name,
-          }))}
+          value={team.guides}
           placeholder="Select guides"
         />
       </div>

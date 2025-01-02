@@ -9,6 +9,7 @@ const ManageGuideDetails = () => {
     email: "",
     team: "", // Changed 'department' to 'team'
   });
+  const [teamNames, setTeamNames] = useState([]); // State to store team names
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -16,6 +17,7 @@ const ManageGuideDetails = () => {
       try {
         const guidesData = await apiService.getGuideList();
         setGuides(guidesData);
+        fetchTeamNames(guidesData); // Fetch team names after fetching guide list
       } catch (error) {
         console.error("Error fetching guides:", error);
       }
@@ -24,12 +26,40 @@ const ManageGuideDetails = () => {
     fetchGuides();
   }, []);
 
+  // Function to fetch team names by IDs
+  const fetchTeamNames = async (guides) => {
+    try {
+      const allTeams = [];
+
+      for (const guide of guides) {
+        for (const teamId of guide.team) {
+          // Check if the team name is already fetched
+          if (!allTeams.some((t) => t.id === teamId)) {
+            const team = await apiService.getTeamById(teamId);
+            allTeams.push({ id: teamId, name: team.data.team.name });
+          }
+        }
+      }
+
+      setTeamNames(allTeams); // Save team names to state
+    } catch (err) {
+      console.error("Error fetching team details:", err);
+    }
+  };
+
+  // Function to get the team name by ID
+  const getTeamNameById = (teamId) => {
+    const team = teamNames.find((t) => t.id === teamId);
+    return team ? team.name : "No Team Assigned";
+  };
+
   const handleSelectGuide = (guide) => {
     setSelectedGuide(guide);
     setUpdatedData({
       name: guide.name,
       email: guide.email,
-      team: guide.team, // Changed 'department' to 'team'
+      team:
+        guide.team.length > 0 ? guide.team.map(getTeamNameById).join(", ") : "",
     });
   };
 
@@ -76,7 +106,12 @@ const ManageGuideDetails = () => {
               onClick={() => handleSelectGuide(guide)}
             >
               <h3>{guide.name}</h3>
-              <p>{guide.team}</p> {/* Changed 'department' to 'team' */}
+              <p>
+                {guide.team.length > 0
+                  ? guide.team.map(getTeamNameById).join(", ")
+                  : "No Team Assigned"}
+              </p>{" "}
+              {/* Displaying team names */}
               <p>{guide.email}</p>
             </div>
           ))
