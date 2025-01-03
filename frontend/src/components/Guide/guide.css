@@ -1,0 +1,868 @@
+/* Overall Dashboard Styles */
+.intern-dashboard {
+  font-family: Arial, sans-serif;
+  /* padding: 20px; */
+}
+
+/* Navigation Bar */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #007bff;
+  color: white;
+  padding: 10px 20px;
+}
+
+.navbar-left {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-button {
+  margin-left: 15px;
+  padding: 8px 15px;
+  background-color: #0056b3;
+  border: none;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.navbar-button:hover {
+  background-color: #004085;
+}
+
+/* Tab Navigation */
+.tab-navigation {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.tab-button {
+  background-color: #f0f0f0;
+  border: 1px solid #ddd;
+  padding: 10px 20px;
+  cursor: pointer;
+  margin: 0 10px;
+  font-size: 16px;
+  border-radius: 5px;
+}
+
+.tab-button.active {
+  background-color: #007bff;
+  color: white;
+}
+
+.tab-button:hover {
+  background-color: #ddd;
+}
+
+/* Content Section */
+.content {
+  margin: 30px;
+}
+
+/* Dash Layout with Grid */
+.dash {
+  display: grid;
+  grid-template-columns: 1fr 2fr; /* Two columns for Team and Milestones */
+  grid-template-rows: auto 1fr; /* Auto height for the first row, and remaining space for the second row */
+  gap: 20px; /* Gap between sections */
+  width: 100%;
+}
+
+/* Team Section */
+.team-section {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  margin-right: 20px;
+  border: 1px solid #007bff;
+  height: 400px; /* Fixed height */
+  overflow-y: auto; /* Scroll if content overflows */
+}
+
+.team-section:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.team-section h2 {
+  font-size: 26px;
+  color: #007bff;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #007bff;
+  padding-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.team-section ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.team-section li {
+  font-size: 16px;
+  color: #374151;
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 8px;
+}
+
+.team-section li:hover {
+  background-color: #f1f9ff;
+}
+
+/* Milestones Section */
+.milestones-section {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease-in-out, transform 0.3s ease-in-out;
+  max-height: 400px;
+  overflow-y: scroll;
+}
+
+.milestones-section h3 {
+  font-size: 26px;
+  color: #007bff;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #007bff;
+  padding-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.milestones-section:hover {
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  transform: translateY(-5px);
+}
+
+.milestone {
+  margin-bottom: 15px;
+  padding: 20px;
+  background-color: #f5faff;
+  border-radius: 8px;
+  cursor: pointer;
+  border: 1px solid #cfe2ff;
+  transition: background-color 0.3s, border-color 0.3s, transform 0.2s;
+}
+
+.milestone:hover {
+  background-color: #e9f2ff;
+  border-color: #007bff;
+  transform: scale(1.02);
+}
+
+.milestone-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid #cfe2ff;
+}
+
+.milestone-header h4 {
+  font-size: 20px;
+  color: #1e3a8a;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.subtasks {
+  margin-top: 15px;
+  padding-left: 20px;
+  background-color: #f9fafb;
+  border-radius: 4px;
+  padding: 10px;
+}
+
+/* Upcoming Demos Section */
+.upcoming-demos-section {
+  grid-column: span 2; /* Spans across both columns */
+  margin-top: 30px;
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  /*width: 100%; !* Ensure it fills available space *!*/
+}
+
+.upcoming-demos-section h3 {
+  font-size: 26px;
+  color: #007bff;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #007bff;
+  padding-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: bold;
+}
+
+#demos-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* Space between demo items */
+}
+
+.demo {
+  margin-bottom: 15px;
+  padding: 20px;
+  background-color: #f5faff;
+  border-radius: 8px;
+  cursor: pointer;
+  border: 1px solid #cfe2ff;
+  transition: background-color 0.3s, border-color 0.3s;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.demo:hover {
+  background-color: #e9f2ff;
+  border-color: #007bff;
+  transform: scale(1.02); /* Subtle zoom on hover */
+}
+
+.demo-header h4 {
+  font-size: 20px;
+  color: #1e3a8a;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.demo-header p {
+  font-size: 14px;
+  color: #6b7280;
+}
+
+/* Make the demo section responsive */
+@media (max-width: 768px) {
+  .dash {
+    grid-template-columns: 1fr; /* Single column layout on small screens */
+  }
+
+  .team-section,
+  .milestones-section,
+  .upcoming-demos-section {
+    width: 100%;
+  }
+}
+.team-section {
+  margin-top: 20px;
+  padding: 20px;
+  background-color: #f4f7fa;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.team-section h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.team-members {
+  display: flex;
+  gap: 20px;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.team-card {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  flex: 1 1 calc(50% - 20px);
+  min-width: 200px;
+}
+
+.team-card h4 {
+  font-size: 1.2rem;
+  color: #007bff;
+  font-weight: 500;
+}
+
+.member-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.member-item {
+  display: flex;
+  align-items: center;
+  padding: 8px 0;
+}
+
+.member-item span {
+  font-size: 1rem;
+  color: #555;
+}
+
+.member-item:hover {
+  background-color: #f1f1f1;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .team-members {
+    flex-direction: column;
+  }
+
+  .team-card {
+    flex: 1 1 100%;
+    margin-bottom: 20px;
+  }
+}
+
+.upcoming-demos-section {
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+}
+
+.demo {
+  margin-bottom: 20px;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #fff;
+}
+
+.demo h4 {
+  margin: 0;
+  color: #333;
+}
+
+.demo p {
+  margin: 5px 0;
+  color: #555;
+}
+.milestones-section {
+  margin-top: 20px;
+}
+
+.milestone-scroll-container {
+  max-height: 300px;
+  overflow-y: auto;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.milestone {
+  padding: 15px;
+  margin-bottom: 10px;
+  background: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.milestone-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.milestone-title {
+  font-weight: bold;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.milestone-complete-icon {
+  font-size: 1.2rem;
+  color: gold;
+}
+
+.milestone-description {
+  flex: 1;
+  text-align: right;
+  font-style: italic;
+  color: #666;
+}
+
+.subtasks {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-top: 10px;
+}
+
+.subtask {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.subtask-icon {
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.subtask-icon.completed {
+  color: green;
+}
+
+.completed {
+  background: #e6ffe6;
+}
+
+/* Container for the header-right, making space for both icons */
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 15px; /* Add space between the icons */
+}
+
+/* Styling for the profile icon */
+.profile-icon-container {
+  position: relative; /* Ensures dropdown positions relative to the profile icon */
+}
+
+.profile-icon {
+  cursor: pointer;
+  display: inline-block;
+  transition: transform 0.3s ease;
+}
+
+/* Optional: Hover effect on the profile icon */
+.profile-icon:hover {
+  transform: scale(1.1);
+}
+
+/* Styling for the profile dropdown */
+.profile-dropdown {
+  position: absolute;
+  top: 30px; /* Adjust this value if the dropdown is too far down or up */
+  right: 0;
+  background-color: white;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  width: 150px; /* Width of the dropdown */
+  z-index: 10;
+  padding: 5px 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-dropdown button {
+  background-color: transparent;
+  border: none;
+  padding: 8px 16px;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.profile-dropdown button:hover {
+  background-color: #f0f0f0; /* Light hover effect for buttons */
+}
+
+/* Prevent dropdown from extending too far when clicked */
+.profile-dropdown button:focus {
+  outline: none;
+}
+
+/* Optional: A small hover effect for the notification icon */
+.notification-icon:hover {
+  opacity: 0.8;
+}
+
+/* Optional: Align icons properly */
+.notification-icon,
+.profile-icon {
+  display: inline-block;
+  padding: 8px;
+  cursor: pointer;
+}
+
+.notification-icon {
+  margin-right: 10px; /* Space between the notification icon and the profile icon */
+}
+/* Add these styles to your intern.css file */
+
+.profile-dropdown-container {
+  position: relative;
+  display: inline-block;
+}
+
+.profile-icon {
+  cursor: pointer;
+}
+
+.profile-dropdown {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  min-width: 120px;
+}
+
+.profile-dropdown div {
+  padding: 10px 15px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.profile-dropdown div:hover {
+  background-color: #f5f5f5;
+}
+
+.profile-dropdown div:not(:last-child) {
+  border-bottom: 1px solid #eee;
+}
+/* Profile dropdown styles */
+.profile-dropdown-container {
+  position: relative;
+  display: inline-block;
+}
+
+.profile-icon {
+  cursor: pointer;
+  padding: 8px;
+}
+
+.profile-dropdown {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 5px);
+  background-color: #2d3748;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  min-width: 160px;
+  overflow: hidden;
+}
+
+.profile-dropdown div {
+  padding: 12px 20px;
+  color: #ffffff;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  font-size: 14px;
+}
+
+.profile-dropdown div:hover {
+  background-color: #4a5568;
+}
+
+.profile-dropdown div:not(:last-child) {
+  border-bottom: 1px solid #4a5568;
+}
+/* Add these styles to guide.css */
+
+.teams-container {
+  margin-bottom: 2rem;
+}
+
+.team-bar {
+  background-color: #f8fafc;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.team-bar:hover {
+  background-color: #f1f5f9;
+}
+
+.team-bar.active {
+  background-color: #e2e8f0;
+  border-left: 4px solid #3182ce;
+}
+
+.team-bar h3 {
+  margin: 0;
+  color: #2d3748;
+}
+
+.team-details {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+/* Rest of the styles can remain the same as intern.css */
+/* Overall container for teams */
+.teams-container {
+  margin-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem; /* Adding space between each team card */
+}
+
+/* Styling each team card */
+.team-bar {
+  background-color: #f8fafc;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  height: 100%; /* Ensures uniform height for all team cards */
+  min-height: 200px;
+}
+
+/* Hover effect for team card */
+.team-bar:hover {
+  background-color: #f1f5f9;
+  transform: scale(1.03); /* Slight scale-up on hover for better feedback */
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1); /* More prominent shadow on hover */
+}
+
+/* Active team styling */
+.team-bar.active {
+  background-color: #e2e8f0;
+  border-left: 4px solid #3182ce; /* Blue accent when active */
+  box-shadow: 0 6px 10px rgba(0, 128, 255, 0.3); /* More emphasis on the selected team */
+}
+
+.team-bar.active h3 {
+  color: #3182ce; /* Change text color of active team name to blue */
+  font-weight: bold; /* Make the active team's name bold */
+}
+
+/* Team name styling */
+.team-bar h3 {
+  margin: 0;
+  color: #2d3748;
+  font-size: 1.2rem;
+  font-weight: 500; /* Slightly less bold for normal teams */
+}
+
+/* Details section of the team when active */
+.team-details {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+/* Team card content (interns and guides) */
+.team-card {
+  background-color: #fff;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.team-card h4 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #2d3748;
+  margin-bottom: 0.8rem;
+}
+
+/* Member list for interns and guides */
+.member-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.member-item {
+  padding: 5px 0;
+  font-size: 1em;
+  color: #4a5568;
+}
+
+.member-item span {
+  color: #4a5568;
+  font-weight: 400;
+}
+
+/* Enhancing the hover state for member items */
+.member-item:hover {
+  color: #3182ce;
+  cursor: pointer;
+}
+
+/* Styling the entire team card container */
+.team-bar.active .team-details {
+  background-color: #f0f4f8; /* Background change when active */
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+/* Overall container for teams */
+.teams-container {
+  margin-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem; /* Adding space between each team card */
+}
+
+/* Styling each team card */
+.team-bar {
+  background-color: #f8fafc;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  height: 100%; /* Ensures uniform height for all team cards */
+  min-height: 200px;
+}
+
+/* Hover effect for team card */
+.team-bar:hover {
+  background-color: #f1f5f9;
+  transform: scale(1.03); /* Slight scale-up on hover for better feedback */
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1); /* More prominent shadow on hover */
+}
+
+/* Active team styling */
+.team-bar.active {
+  background-color: #e2e8f0;
+  border-left: 4px solid #3182ce; /* Blue accent when active */
+  box-shadow: 0 6px 10px rgba(0, 128, 255, 0.3); /* More emphasis on the selected team */
+}
+
+.team-bar.active h3 {
+  color: #3182ce; /* Change text color of active team name to blue */
+  font-weight: bold; /* Make the active team's name bold */
+}
+
+/* Team name styling */
+.team-bar h3 {
+  margin: 0;
+  color: #2d3748;
+  font-size: 1.2rem;
+  font-weight: 500; /* Slightly less bold for normal teams */
+}
+
+/* Details section of the team when active */
+.team-details {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+/* Team card content (interns and guides) */
+.team-card {
+  background-color: #fff;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.team-card h4 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #2d3748;
+  margin-bottom: 0.8rem;
+}
+
+/* Member list for interns and guides */
+.member-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.member-item {
+  padding: 5px 0;
+  font-size: 1em;
+  color: #4a5568;
+}
+
+.member-item span {
+  color: #4a5568;
+  font-weight: 400;
+}
+
+/* Enhancing the hover state for member items */
+.member-item:hover {
+  color: #3182ce;
+  cursor: pointer;
+}
+
+/* Styling the entire team card container */
+.team-bar.active .team-details {
+  background-color: #f0f4f8; /* Background change when active */
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+/* Styling for the team card when selected */
+.team-card.active {
+  background-color: #e2e8f0; /* Lighter grey-blue background for active team */
+  color: #2d3748; /* Darker text for better contrast */
+  border-left: 4px solid #4a5568; /* Slightly darker grey for the left border */
+  box-shadow: 0 4px 8px rgba(100, 100, 100, 0.1); /* Soft shadow effect */
+}
+
+/* Styling for the team header when selected */
+.team-header.active-header {
+  background-color: #edf2f7; /* Subtle grey background for active header */
+  color: #2d3748; /* Dark text color */
+  padding: 1rem;
+}
+
+/* Active team details */
+.team-card.active .team-details {
+  background-color: #f7fafc; /* Very light grey background for details */
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(100, 100, 100, 0.1);
+}
+
+.subtask-input {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.subtask-input input {
+  padding: 5px;
+  font-size: 14px;
+}
+
+.add-subtask-btn {
+  padding: 5px 10px;
+  font-size: 14px;
+  cursor: pointer;
+}

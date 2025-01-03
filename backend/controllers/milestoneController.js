@@ -59,9 +59,10 @@ exports.getMilestonesByTeam = catchAsync(async (req, res, next) => {
 
   const milestones = await Milestone.find({ teamId }).sort("milestoneNumber");
 
-  if (!milestones || milestones.length === 0) {
-    return next(new AppError("No milestones found for the team", 404));
-  }
+  // if (!milestones || milestones.length === 0) {
+
+  //   return next(new AppError("No milestones found for the team", 404));
+  // }
 
   res.status(200).json({
     status: "success",

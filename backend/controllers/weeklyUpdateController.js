@@ -36,10 +36,9 @@ exports.getAllWeeklyUpdates = catchAsync(async (req, res, next) => {
   const { teamId } = req.params;
 
   // Fetch all updates for the team
-  const updates = await WeeklyUpdate.find({ teamId }).populate(
-    "createdBy",
-    "name"
-  );
+  const updates = await WeeklyUpdate.find({ teamId })
+    .populate("createdBy", "name")
+    .sort({ week: -1 }); // -1 for descending order
 
   // Update the 'seen' status for the requesting user
   updates.forEach((update) => {
