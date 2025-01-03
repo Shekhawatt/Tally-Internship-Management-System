@@ -592,6 +592,7 @@ const apiService = {
     }
   },
 
+
   // Fetch all demos
   getAllDemos: async () => {
     try {
@@ -646,6 +647,7 @@ const apiService = {
         throw new Error("Authorization token not found");
       }
 
+
       const response = await axios.get(`${API_URL}/api/demos/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -689,6 +691,7 @@ const apiService = {
       }
 
       const response = await axios.delete(`${API_URL}/api/demos/${id}`, {
+
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -696,6 +699,7 @@ const apiService = {
 
       return response.data;
     } catch (error) {
+
       console.error("Error deleting demo:", error.message);
       throw new Error("Failed to delete demo");
     }
@@ -716,6 +720,7 @@ const apiService = {
 
       return response.data;
     } catch (error) {
+
       console.error("Error creating batch:", error.message);
       throw new Error("Failed to create batch");
     }
@@ -830,6 +835,59 @@ const apiService = {
     } catch (error) {
       console.error("Error fetching interns by batch:", error.message);
       throw new Error("Failed to fetch interns by batch");
+    }
+  },
+
+
+  // Fetching weekly updates
+  fetchWeeklyUpdates: async (teamId) => {
+    try {
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        throw new Error("Authorization token not found");
+      }
+
+      const response = await axios.get(
+        `${API_URL}/api/weeklyUpdate/${teamId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching weekly updates:", error.message);
+      throw new Error("Failed to fetch weekly updates");
+    }
+  },
+  addWeeklyUpdate: async (teamId, week, description) => {
+    try {
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        throw new Error("Authorization token not found");
+      }
+
+      const response = await axios.post(
+        `${API_URL}/api/weeklyUpdate/`,
+        {
+          teamId: teamId,
+          week: week,
+          description: description,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      // console.log(response.data);
+      return response.data;
+    } catch (error) {
+      console.error("Error adding weekly update:", error.message);
+      throw new Error("Failed to add weekly update");
     }
   },
 

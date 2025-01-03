@@ -576,3 +576,293 @@
 .profile-dropdown div:not(:last-child) {
   border-bottom: 1px solid #4a5568;
 }
+/* Add these styles to guide.css */
+
+.teams-container {
+  margin-bottom: 2rem;
+}
+
+.team-bar {
+  background-color: #f8fafc;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.team-bar:hover {
+  background-color: #f1f5f9;
+}
+
+.team-bar.active {
+  background-color: #e2e8f0;
+  border-left: 4px solid #3182ce;
+}
+
+.team-bar h3 {
+  margin: 0;
+  color: #2d3748;
+}
+
+.team-details {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+/* Rest of the styles can remain the same as intern.css */
+/* Overall container for teams */
+.teams-container {
+  margin-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem; /* Adding space between each team card */
+}
+
+/* Styling each team card */
+.team-bar {
+  background-color: #f8fafc;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  height: 100%; /* Ensures uniform height for all team cards */
+  min-height: 200px;
+}
+
+/* Hover effect for team card */
+.team-bar:hover {
+  background-color: #f1f5f9;
+  transform: scale(1.03); /* Slight scale-up on hover for better feedback */
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1); /* More prominent shadow on hover */
+}
+
+/* Active team styling */
+.team-bar.active {
+  background-color: #e2e8f0;
+  border-left: 4px solid #3182ce; /* Blue accent when active */
+  box-shadow: 0 6px 10px rgba(0, 128, 255, 0.3); /* More emphasis on the selected team */
+}
+
+.team-bar.active h3 {
+  color: #3182ce; /* Change text color of active team name to blue */
+  font-weight: bold; /* Make the active team's name bold */
+}
+
+/* Team name styling */
+.team-bar h3 {
+  margin: 0;
+  color: #2d3748;
+  font-size: 1.2rem;
+  font-weight: 500; /* Slightly less bold for normal teams */
+}
+
+/* Details section of the team when active */
+.team-details {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+/* Team card content (interns and guides) */
+.team-card {
+  background-color: #fff;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.team-card h4 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #2d3748;
+  margin-bottom: 0.8rem;
+}
+
+/* Member list for interns and guides */
+.member-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.member-item {
+  padding: 5px 0;
+  font-size: 1em;
+  color: #4a5568;
+}
+
+.member-item span {
+  color: #4a5568;
+  font-weight: 400;
+}
+
+/* Enhancing the hover state for member items */
+.member-item:hover {
+  color: #3182ce;
+  cursor: pointer;
+}
+
+/* Styling the entire team card container */
+.team-bar.active .team-details {
+  background-color: #f0f4f8; /* Background change when active */
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+/* Overall container for teams */
+.teams-container {
+  margin-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem; /* Adding space between each team card */
+}
+
+/* Styling each team card */
+.team-bar {
+  background-color: #f8fafc;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  height: 100%; /* Ensures uniform height for all team cards */
+  min-height: 200px;
+}
+
+/* Hover effect for team card */
+.team-bar:hover {
+  background-color: #f1f5f9;
+  transform: scale(1.03); /* Slight scale-up on hover for better feedback */
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1); /* More prominent shadow on hover */
+}
+
+/* Active team styling */
+.team-bar.active {
+  background-color: #e2e8f0;
+  border-left: 4px solid #3182ce; /* Blue accent when active */
+  box-shadow: 0 6px 10px rgba(0, 128, 255, 0.3); /* More emphasis on the selected team */
+}
+
+.team-bar.active h3 {
+  color: #3182ce; /* Change text color of active team name to blue */
+  font-weight: bold; /* Make the active team's name bold */
+}
+
+/* Team name styling */
+.team-bar h3 {
+  margin: 0;
+  color: #2d3748;
+  font-size: 1.2rem;
+  font-weight: 500; /* Slightly less bold for normal teams */
+}
+
+/* Details section of the team when active */
+.team-details {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+/* Team card content (interns and guides) */
+.team-card {
+  background-color: #fff;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.team-card h4 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #2d3748;
+  margin-bottom: 0.8rem;
+}
+
+/* Member list for interns and guides */
+.member-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.member-item {
+  padding: 5px 0;
+  font-size: 1em;
+  color: #4a5568;
+}
+
+.member-item span {
+  color: #4a5568;
+  font-weight: 400;
+}
+
+/* Enhancing the hover state for member items */
+.member-item:hover {
+  color: #3182ce;
+  cursor: pointer;
+}
+
+/* Styling the entire team card container */
+.team-bar.active .team-details {
+  background-color: #f0f4f8; /* Background change when active */
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+/* Styling for the team card when selected */
+.team-card.active {
+  background-color: #e2e8f0; /* Lighter grey-blue background for active team */
+  color: #2d3748; /* Darker text for better contrast */
+  border-left: 4px solid #4a5568; /* Slightly darker grey for the left border */
+  box-shadow: 0 4px 8px rgba(100, 100, 100, 0.1); /* Soft shadow effect */
+}
+
+/* Styling for the team header when selected */
+.team-header.active-header {
+  background-color: #edf2f7; /* Subtle grey background for active header */
+  color: #2d3748; /* Dark text color */
+  padding: 1rem;
+}
+
+/* Active team details */
+.team-card.active .team-details {
+  background-color: #f7fafc; /* Very light grey background for details */
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(100, 100, 100, 0.1);
+}
+
+.subtask-input {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.subtask-input input {
+  padding: 5px;
+  font-size: 14px;
+}
+
+.add-subtask-btn {
+  padding: 5px 10px;
+  font-size: 14px;
+  cursor: pointer;
+}

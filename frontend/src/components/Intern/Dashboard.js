@@ -5,8 +5,9 @@ import { faBell, faUserCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import InternProfile from "./InternProfile";
 import apiService from "../../services/apiService";
+import WeeklyUpdates from "./WeeklyUpdates";
 
-// DashboardContent Component
+// DashboardContent Component remains the same
 function DashboardContent({
   team,
   demos,
@@ -14,12 +15,12 @@ function DashboardContent({
   handleSubtaskCheck,
   toggleMilestoneVisibility,
 }) {
+  // Previous DashboardContent implementation remains unchanged
   return (
     <div className="dash">
       {/* Team Section */}
       <div className="team-section">
         <h2>{team.name}</h2>
-
         <div className="team-members">
           <div className="team-card">
             <h4>Interns</h4>
@@ -61,24 +62,34 @@ function DashboardContent({
                   className="milestone-header"
                   onClick={() => toggleMilestoneVisibility(milestone._id)}
                 >
-                  <h4>{milestone.title}</h4>
-                  <p>{milestone.description}</p>
+                  <h4 className="milestone-title">
+                    {milestone.title}
+                    {allCompleted && (
+                      <span className="milestone-complete-icon">🏆</span>
+                    )}
+                  </h4>
+                  <div className="milestone-description">
+                    <p>{milestone.description}</p>
+                  </div>
                 </div>
                 {milestone.isOpen && (
                   <div className="subtasks">
                     {milestone.subtasks.map((subtask) => (
                       <div key={subtask._id} className="subtask">
-                        <input
-                          type="checkbox"
-                          checked={subtask.isCompleted}
-                          onChange={() =>
+                        <span
+                          className={`subtask-icon ${
+                            subtask.isCompleted ? "completed" : ""
+                          }`}
+                          onClick={() =>
                             handleSubtaskCheck(
                               milestone._id,
                               subtask._id,
                               !subtask.isCompleted
                             )
                           }
-                        />
+                        >
+                          {subtask.isCompleted ? "✅" : "⬜"}
+                        </span>
                         <span>{subtask.title}</span>
                       </div>
                     ))}
@@ -114,32 +125,33 @@ function DashboardContent({
 function InternDashboard() {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("dashboard");
+  const [showDropdown, setShowDropdown] = useState(false);
   const [team, setTeam] = useState({
     name: "Loading...",
     members: [],
     guides: [],
   });
+  const [teamId, setTeamId] = useState();
   const [demos, setDemos] = useState([]);
   const [milestones, setMilestones] = useState([]);
+  const [weeklyUpdates, setWeeklyUpdates] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Fetching user profile to get the team ID
         const userResponse = await apiService.getProfile();
         const user = userResponse.user;
         if (!user.team) {
           throw new Error("User is not assigned to any team");
         }
 
-        // Fetch team details using the team ID from user profile
         const teamResponse = await apiService.getTeamById(user.team[0]);
         setTeam(teamResponse.data.team);
 
-        // Fetch milestones for the team
         const milestonesResponse = await apiService.getMilestonesByTeam(
           user.team[0]
         );
+        setTeamId(user.team[0]);
         const milestonesWithOpenState = milestonesResponse.data.milestones.map(
           (milestone) => ({
             ...milestone,
@@ -149,8 +161,12 @@ function InternDashboard() {
         setMilestones(milestonesWithOpenState);
 
         const demosResponse = await apiService.getDemosById();
-        console.log(demosResponse);
         setDemos(demosResponse.data);
+
+        const weeklyUpdatesResponse = await apiService.fetchWeeklyUpdates(
+          user.team[0]
+        );
+        setWeeklyUpdates(weeklyUpdatesResponse.data.updates);
       } catch (err) {
         console.error("Error fetching data:", err);
       }
@@ -159,7 +175,6 @@ function InternDashboard() {
     fetchData();
   }, []);
 
-  // Handling subtask completion
   const handleSubtaskCheck = async (milestoneId, subtaskId, isCompleted) => {
     try {
       await apiService.updateMilestoneSubtask(
@@ -185,7 +200,6 @@ function InternDashboard() {
     }
   };
 
-  // Toggling milestone visibility
   const toggleMilestoneVisibility = (milestoneId) => {
     const updatedMilestones = milestones.map((milestone) => {
       if (milestone._id === milestoneId) {
@@ -196,19 +210,50 @@ function InternDashboard() {
     setMilestones(updatedMilestones);
   };
 
+  const handleUpdateClick = (update) => {
+    // Implementation remains the same
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("authToken");
+    navigate("/");
+  };
+
+  const handleProfileClick = () => {
+    setShowDropdown(false);
+    navigate("/intern/profile");
+  };
+
+  const handleDashboardClick = () => {
+    navigate("/intern");
+  };
+
   return (
     <div className="intern-dashboard">
       <header className="dashboard-header">
         <div className="header-left">
-          <h2>Intern Dashboard</h2>
+          <h2 onClick={handleDashboardClick} style={{ cursor: "pointer" }}>
+            Intern Dashboard
+          </h2>
         </div>
         <div className="header-right">
           <i className="notification-icon">
             <FontAwesomeIcon icon={faBell} size="lg" />
           </i>
-          <i className="profile-icon" onClick={() => navigate("profile")}>
-            <FontAwesomeIcon icon={faUserCircle} size="lg" />
-          </i>
+          <div className="profile-dropdown-container">
+            <i
+              className="profile-icon"
+              onClick={() => setShowDropdown(!showDropdown)}
+            >
+              <FontAwesomeIcon icon={faUserCircle} size="lg" />
+            </i>
+            {showDropdown && (
+              <div className="profile-dropdown">
+                <div onClick={handleProfileClick}>Profile</div>
+                <div onClick={handleLogout}>Logout</div>
+              </div>
+            )}
+          </div>
         </div>
       </header>
 
@@ -246,10 +291,12 @@ function InternDashboard() {
                   />
                 )}
                 {activeTab === "weekly-updates" && (
-                  <div className="weekly-updates-section">
-                    <h3>Weekly Updates</h3>
-                    <p>Content for weekly updates will be displayed here.</p>
-                  </div>
+                  <WeeklyUpdates
+                    updates={weeklyUpdates}
+                    onUpdateClick={handleUpdateClick}
+                    teamId={teamId}
+                    setWeeklyUpdates={setWeeklyUpdates}
+                  />
                 )}
               </div>
             </>

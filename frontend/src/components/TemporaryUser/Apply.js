@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useEffect } from "react";
 import ApiService from "../../services/apiService"; // Service for API calls
 import "./apply.css"; // Ensure you import the new CSS file
 
@@ -19,6 +20,7 @@ const Apply = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [batches, setBatches] = useState([]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -57,6 +59,22 @@ const Apply = () => {
     }
   };
 
+  useEffect(() => {
+    const fetchBatches = async () => {
+      try {
+        const response = await ApiService.getAllBatches();
+        console.log(response.data.batches);
+        if (response.status === "success") {
+          setBatches(response.data.batches); // assuming response.data contains the list of batches
+        }
+      } catch (error) {
+        console.error("Error fetching batches:", error);
+        setErrorMessage("Failed to load batches. Please try again later.");
+      }
+    };
+
+    fetchBatches();
+  }, []);
   return (
     <div className="container">
       <h1 className="heading">Tally Solutions Internship Application</h1>
@@ -231,17 +249,23 @@ const Apply = () => {
 
         <div className="form-group">
           <label className="form-label" htmlFor="batch">
-            Batch ID
+            Select Batch
           </label>
-          <input
-            type="text"
+          <select
             id="batch"
             name="batch"
             value={formData.batch}
             onChange={handleChange}
             className="form-control"
             required
-          />
+          >
+            <option value="">Select a Batch</option>
+            {batches.map((batch) => (
+              <option key={batch} value={batch._id}>
+                {batch.name}
+              </option>
+            ))}
+          </select>
         </div>
 
         {errorMessage && <p className="error-message">{errorMessage}</p>}

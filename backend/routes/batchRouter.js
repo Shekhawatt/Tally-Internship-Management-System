@@ -26,12 +26,7 @@ router.delete(
   batchController.deleteBatch
 );
 
-router.get(
-  "/",
-  authController.protect,
-  authController.restrictTo("admin"),
-  batchController.getAllBatches
-);
+router.get("/", authController.protect, batchController.getAllBatches);
 
 router.get(
   "/:id",
