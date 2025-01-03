@@ -5,6 +5,7 @@ import UserManagement from "./UserManagement"; // Ensure this import is correct
 import ProjectManagement from "./ProjectManagement"; // Ensure this import is correct
 import TeamManagement from "./TeamManagement"; // Ensure this import is correct
 import BatchManagement from "./BatchManagement"; // Ensure this import is correct
+import DemoManagement from "./DemoManagement"; // Ensure this import is correct
 import AdminProfile from "./admin-Profile";
 import "./Dashboard.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -112,7 +113,7 @@ const AdminDashboard = () => {
               element={<ProjectManagement />}
             />
             <Route path="/profile" element={<AdminProfile />} />
-            <Route path="/demo-management" element={<DemoManagement />} />
+            <Route path="/demo-management/*" element={<DemoManagement />} />
             <Route path="/batch-management/*" element={<BatchManagement />} />
             <Route path="/report-generation" element={<ReportGeneration />} />
           </Routes>
@@ -145,14 +146,6 @@ const DashboardHome = ({ data }) => (
 );
 
 // Individual Page Components with Basic Structure
-
-const DemoManagement = () => (
-  <div>
-    <h2>Demo Management</h2>
-    <p>Organize and schedule demos here.</p>
-    {/* Add demo scheduling functionalities */}
-  </div>
-);
 
 const ReportGeneration = () => (
   <div>

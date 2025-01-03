@@ -27,12 +27,12 @@ const demoSchema = new mongoose.Schema(
     endDateTime: {
       type: Date,
       required: [true, "A demo must have an end date and time"],
-      validate: {
-        validator: function (value) {
-          return value > this.startDateTime;
-        },
-        message: "End date and time must be after start date and time",
-      },
+      // validate: {
+      //   validator: function (value) {
+      //     return value > this.startDateTime;
+      //   },
+      //   message: "End date and time must be after start date and time",
+      // },
     },
   },
   { timestamps: true }
