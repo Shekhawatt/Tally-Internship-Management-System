@@ -592,17 +592,15 @@ const apiService = {
     }
   },
 
-  createBatch: async (batchData) => {
-
+  // Fetch all demos
+  getAllDemos: async () => {
     try {
       const token = localStorage.getItem("authToken");
       if (!token) {
         throw new Error("Authorization token not found");
       }
 
-
-      const response = await axios.post(`${API_URL}/api/batch`, batchData, {
-
+      const response = await axios.get(`${API_URL}/api/demos`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -610,7 +608,114 @@ const apiService = {
 
       return response.data;
     } catch (error) {
+      console.error("Error fetching all demos:", error.message);
+      throw new Error("Failed to fetch demos");
+    }
+  },
 
+  // Update demo details
+  updateDemo: async (id, demoData) => {
+    try {
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        throw new Error("Authorization token not found");
+      }
+
+      const response = await axios.patch(
+        `${API_URL}/api/demos/${id}`,
+        demoData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      return response.data;
+    } catch (error) {
+      console.error("Error in updateDemo:", error.message);
+      throw new Error("Failed to update demo");
+    }
+  },
+
+  // Get demo by ID
+  getDemoById: async (id) => {
+    try {
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        throw new Error("Authorization token not found");
+      }
+
+      const response = await axios.get(`${API_URL}/api/demos/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return response.data;
+    } catch (error) {
+      console.error("Error in getDemoById:", error.message);
+      throw new Error("Failed to fetch demo");
+    }
+  },
+
+  // Create a new demo
+  createDemo: async (demoData) => {
+    try {
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        throw new Error("Authorization token not found");
+      }
+
+      const response = await axios.post(`${API_URL}/api/demos`, demoData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return response.data;
+    } catch (error) {
+      console.error("Error creating demo:", error.message);
+      throw new Error("Failed to create demo");
+    }
+  },
+
+  // Delete a demo
+  deleteDemo: async (id) => {
+    try {
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        throw new Error("Authorization token not found");
+      }
+
+      const response = await axios.delete(`${API_URL}/api/demos/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return response.data;
+    } catch (error) {
+      console.error("Error deleting demo:", error.message);
+      throw new Error("Failed to delete demo");
+    }
+  },
+
+  createBatch: async (batchData) => {
+    try {
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        throw new Error("Authorization token not found");
+      }
+
+      const response = await axios.post(`${API_URL}/api/batch`, batchData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return response.data;
+    } catch (error) {
       console.error("Error creating batch:", error.message);
       throw new Error("Failed to create batch");
     }
@@ -727,7 +832,6 @@ const apiService = {
       throw new Error("Failed to fetch interns by batch");
     }
   },
-
 
   // Other API methods like logout, fetch user data, etc.
 };
